@@ -8,6 +8,7 @@ import { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   const [usuario, setUsuario] = useState(null);
@@ -15,16 +16,16 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Ruta protegida para Home */}
         <Route
           path="/"
           element={
-            usuario ? (
-              <Home correoUsuario={usuario.email} />
-            ) : (
-              <Navigate to="/login" />
-            )
+            <ProtectedRoute usuario={usuario}>
+              <Home correoUsuario={usuario?.email} />
+            </ProtectedRoute>
           }
         />
+        {/* Rutas públicas */}
         <Route path="/login" element={<Login setUsuario={setUsuario} />} />
         <Route path="/register" element={<Register />} />
       </Routes>

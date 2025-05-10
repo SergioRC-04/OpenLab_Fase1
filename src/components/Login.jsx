@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import appFirebase from "../credenciales";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import "./Auth.css"; // Importar estilos
+import "./Auth.css";
 
 const auth = getAuth(appFirebase);
 
