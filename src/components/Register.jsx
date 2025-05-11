@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import appFirebase from "../credenciales";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore"; // Importar Firestore
 import { useNavigate } from "react-router-dom";
-import "./Auth.css"; // Importar estilos
+import "./Auth.css";
 
 const auth = getAuth(appFirebase);
+const db = getFirestore(appFirebase); // Inicializar Firestore
 
 const Register = () => {
   const [error, setError] = useState("");
@@ -24,14 +26,29 @@ const Register = () => {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, correo, contraseña);
-      setError(""); // Limpia errores si el registro es exitoso
-      alert(
-        `Usuario registrado exitosamente:\nNombre: ${nombre} ${apellido}\nEdad: ${edad}`
+      // Crear usuario en Firebase Authentication
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        correo,
+        contraseña
       );
+
+      const userId = userCredential.user.uid; // Obtener el UID del usuario
+
+      // Guardar información adicional en Firestore
+      await setDoc(doc(db, "usuarios", userId), {
+        nombre,
+        apellido,
+        edad,
+        correo,
+      });
+
+      setError(""); // Limpia errores si el registro es exitoso
+      alert("Usuario registrado exitosamente.");
       navigate("/login"); // Redirige a Login
-    } catch {
+    } catch (error) {
       setError("Error al registrar el usuario. Intente nuevamente.");
+      console.error("Error:", error);
     }
   };
 

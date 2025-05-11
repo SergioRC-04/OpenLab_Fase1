@@ -2,31 +2,25 @@ import React, { useState, useEffect } from "react";
 import appFirebase from "../credenciales";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-  doc,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
+import "./home-details.css";
 
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
 
-const Home = ({ correoUsuario }) => {
+const Home = () => {
   const navigate = useNavigate();
   const [proyectos, setProyectos] = useState([]);
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [editando, setEditando] = useState(null);
+  const [imagen, setImagen] = useState("");
+  const [tecnologias, setTecnologias] = useState("");
+  const [colaboradores, setColaboradores] = useState("");
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
 
   const proyectosRef = collection(db, "proyectos");
 
-  // Cargar proyectos del usuario autenticado
   useEffect(() => {
     const cargarProyectos = async () => {
       const q = query(
@@ -44,55 +38,43 @@ const Home = ({ correoUsuario }) => {
     cargarProyectos();
   }, []);
 
-  // Crear un nuevo proyecto
   const handleCrearProyecto = async (e) => {
     e.preventDefault();
     if (!titulo || !descripcion) return;
 
     try {
-      await addDoc(proyectosRef, {
+      const nuevoProyecto = await addDoc(proyectosRef, {
         titulo,
         descripcion,
+        fechaCreacion: new Date().toISOString(),
+        imagen,
+        tecnologias: tecnologias.split(",").map((tec) => tec.trim()),
+        colaboradores: colaboradores.split(",").map((col) => col.trim()),
         userId: auth.currentUser.uid,
       });
+
+      setProyectos((prevProyectos) => [
+        ...prevProyectos,
+        {
+          id: nuevoProyecto.id,
+          titulo,
+          descripcion,
+          fechaCreacion: new Date().toISOString(),
+          imagen,
+          tecnologias: tecnologias.split(",").map((tec) => tec.trim()),
+          colaboradores: colaboradores.split(",").map((col) => col.trim()),
+        },
+      ]);
+
       setTitulo("");
       setDescripcion("");
+      setImagen("");
+      setTecnologias("");
+      setColaboradores("");
+      setMostrarFormulario(false);
       alert("Proyecto creado exitosamente");
-      window.location.reload(); // Recargar para mostrar el nuevo proyecto
     } catch (error) {
       console.error("Error al crear el proyecto:", error);
-    }
-  };
-
-  // Editar un proyecto existente
-  const handleEditarProyecto = async (id) => {
-    const proyectoRef = doc(db, "proyectos", id);
-    try {
-      await updateDoc(proyectoRef, { titulo, descripcion });
-      setTitulo("");
-      setDescripcion("");
-      setEditando(null);
-      alert("Proyecto actualizado exitosamente");
-      window.location.reload(); // Recargar para mostrar los cambios
-    } catch (error) {
-      console.error("Error al editar el proyecto:", error);
-    }
-  };
-
-  // Eliminar un proyecto
-  const handleEliminarProyecto = async (id) => {
-    const confirmacion = window.confirm(
-      "¿Estás seguro de eliminar este proyecto?"
-    );
-    if (!confirmacion) return;
-
-    const proyectoRef = doc(db, "proyectos", id);
-    try {
-      await deleteDoc(proyectoRef);
-      alert("Proyecto eliminado exitosamente");
-      window.location.reload(); // Recargar para mostrar los cambios
-    } catch (error) {
-      console.error("Error al eliminar el proyecto:", error);
     }
   };
 
@@ -106,57 +88,73 @@ const Home = ({ correoUsuario }) => {
   };
 
   return (
-    <div>
-      <h2 className="text-center mt-5">Bienvenido usuario: {correoUsuario}</h2>
-      <button onClick={handleLogout} className="btn btn-primary">
-        Logout
-      </button>
+    <div className="container">
+      <h2>Mis Proyectos</h2>
 
-      <h3>Crear Proyecto</h3>
-      <form
-        onSubmit={
-          editando ? () => handleEditarProyecto(editando) : handleCrearProyecto
-        }
-      >
-        <input
-          type="text"
-          placeholder="Título"
-          value={titulo}
-          onChange={(e) => setTitulo(e.target.value)}
-          required
-        />
-        <textarea
-          placeholder="Descripción"
-          value={descripcion}
-          onChange={(e) => setDescripcion(e.target.value)}
-          required
-        ></textarea>
-        <button type="submit">
-          {editando ? "Actualizar Proyecto" : "Crear Proyecto"}
+      {!mostrarFormulario && (
+        <button onClick={() => setMostrarFormulario(true)}>
+          Crear Proyecto
         </button>
-      </form>
+      )}
 
-      <h3>Mis Proyectos</h3>
+      {mostrarFormulario && (
+        <form onSubmit={handleCrearProyecto}>
+          <input
+            type="text"
+            placeholder="Título"
+            value={titulo}
+            onChange={(e) => setTitulo(e.target.value)}
+            required
+          />
+          <textarea
+            placeholder="Descripción"
+            value={descripcion}
+            onChange={(e) => setDescripcion(e.target.value)}
+            required
+          ></textarea>
+          <input
+            type="text"
+            placeholder="URL de la imagen"
+            value={imagen}
+            onChange={(e) => setImagen(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Tecnologías (separadas por comas)"
+            value={tecnologias}
+            onChange={(e) => setTecnologias(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder="Colaboradores (correos separados por comas)"
+            value={colaboradores}
+            onChange={(e) => setColaboradores(e.target.value)}
+          />
+          <button type="submit">Guardar Proyecto</button>
+          <button type="button" onClick={() => setMostrarFormulario(false)}>
+            Cancelar
+          </button>
+        </form>
+      )}
+
       <ul>
         {proyectos.map((proyecto) => (
           <li key={proyecto.id}>
-            <h4>{proyecto.titulo}</h4>
+            <h3>{proyecto.titulo}</h3>
             <p>{proyecto.descripcion}</p>
-            <button
-              onClick={() => {
-                setTitulo(proyecto.titulo);
-                setDescripcion(proyecto.descripcion);
-                setEditando(proyecto.id);
-              }}
-            >
-              Editar
-            </button>
-            <button onClick={() => handleEliminarProyecto(proyecto.id)}>
-              Eliminar
+            <p>
+              Fecha de creación:{" "}
+              {new Date(proyecto.fechaCreacion).toLocaleDateString()}
+            </p>
+            <p>Tecnologías: {proyecto.tecnologias?.join(", ")}</p>
+            <p>Colaboradores: {proyecto.colaboradores?.join(", ")}</p>
+            <button onClick={() => navigate(`/proyecto/${proyecto.id}`)}>
+              Ver Detalles
             </button>
           </li>
         ))}
       </ul>
+      <button onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );
 };

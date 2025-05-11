@@ -1,13 +1,9 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
+import ProjectDetail from "./components/ProjectDetail";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
@@ -16,7 +12,6 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Ruta protegida para Home */}
         <Route
           path="/"
           element={
@@ -25,7 +20,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* Rutas públicas */}
+        <Route
+          path="/proyecto/:id"
+          element={
+            <ProtectedRoute usuario={usuario}>
+              <ProjectDetail />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/login" element={<Login setUsuario={setUsuario} />} />
         <Route path="/register" element={<Register />} />
       </Routes>
