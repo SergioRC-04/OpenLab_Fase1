@@ -83,6 +83,9 @@ const ProjectDetail = () => {
   return (
     <div className="container">
       <h2>Detalle del Proyecto</h2>
+      <p>
+        <strong>Autor:</strong> {proyecto.autor}
+      </p>
       <form
         onSubmit={(e) => {
           e.preventDefault();

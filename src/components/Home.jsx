@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import appFirebase from "../credenciales";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, query, where, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, getDoc, doc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import "./home-details.css";
 
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
 
-const Home = () => {
+const Home = ({ usuario }) => {
   const navigate = useNavigate();
   const [proyectos, setProyectos] = useState([]);
   const [titulo, setTitulo] = useState("");
@@ -21,13 +21,10 @@ const Home = () => {
 
   const proyectosRef = collection(db, "proyectos");
 
+  // Cargar todos los proyectos sin importar el usuario
   useEffect(() => {
     const cargarProyectos = async () => {
-      const q = query(
-        proyectosRef,
-        where("userId", "==", auth.currentUser.uid)
-      );
-      const querySnapshot = await getDocs(q);
+      const querySnapshot = await getDocs(proyectosRef);
       const proyectosCargados = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -43,6 +40,17 @@ const Home = () => {
     if (!titulo || !descripcion) return;
 
     try {
+      // Solo obtenemos el userId/autor si hay sesión iniciada
+      // (aunque la lógica actual asume que "usuario" existe).
+      const userId = auth.currentUser?.uid || "invitado";
+      let autor = "Anónimo";
+      if (userId !== "invitado") {
+        const userDoc = await getDoc(doc(db, "usuarios", userId));
+        autor = userDoc.exists()
+          ? `${userDoc.data().nombre} ${userDoc.data().apellido}`
+          : "Anónimo";
+      }
+
       const nuevoProyecto = await addDoc(proyectosRef, {
         titulo,
         descripcion,
@@ -50,7 +58,8 @@ const Home = () => {
         imagen,
         tecnologias: tecnologias.split(",").map((tec) => tec.trim()),
         colaboradores: colaboradores.split(",").map((col) => col.trim()),
-        userId: auth.currentUser.uid,
+        userId,
+        autor,
       });
 
       setProyectos((prevProyectos) => [
@@ -63,9 +72,11 @@ const Home = () => {
           imagen,
           tecnologias: tecnologias.split(",").map((tec) => tec.trim()),
           colaboradores: colaboradores.split(",").map((col) => col.trim()),
+          autor,
         },
       ]);
 
+      // Limpiar el formulario
       setTitulo("");
       setDescripcion("");
       setImagen("");
@@ -89,15 +100,33 @@ const Home = () => {
 
   return (
     <div className="container">
-      <h2>Mis Proyectos</h2>
+      <h2>Proyectos</h2>
 
-      {!mostrarFormulario && (
-        <button onClick={() => setMostrarFormulario(true)}>
-          Crear Proyecto
-        </button>
+      {/* Si NO hay usuario, mostrar "Iniciar Sesión" y "Registrarse" */}
+      {!usuario && (
+        <div style={{ marginBottom: "20px" }}>
+          <button onClick={() => navigate("/login")}>Iniciar Sesión</button>
+          <button onClick={() => navigate("/register")}>Registrarse</button>
+        </div>
       )}
 
-      {mostrarFormulario && (
+      {/* Si hay usuario, mostrar "Mis proyectos", "Crear proyecto" y "Cerrar Sesión" */}
+      {usuario && (
+        <div style={{ marginBottom: "20px" }}>
+          <button onClick={() => navigate("/my-projects")}>
+            Mis proyectos
+          </button>
+          {!mostrarFormulario && (
+            <button onClick={() => setMostrarFormulario(true)}>
+              Crear Proyecto
+            </button>
+          )}
+          <button onClick={handleLogout}>Cerrar Sesión</button>
+        </div>
+      )}
+
+      {/* Formulario visible sólo si hay usuario y se presionó "Crear Proyecto" */}
+      {usuario && mostrarFormulario && (
         <form onSubmit={handleCrearProyecto}>
           <input
             type="text"
@@ -126,7 +155,7 @@ const Home = () => {
           />
           <input
             type="text"
-            placeholder="Colaboradores (correos separados por comas)"
+            placeholder="Colaboradores (separados por comas)"
             value={colaboradores}
             onChange={(e) => setColaboradores(e.target.value)}
           />
@@ -137,11 +166,13 @@ const Home = () => {
         </form>
       )}
 
+      {/* Lista de todos los proyectos */}
       <ul>
         {proyectos.map((proyecto) => (
           <li key={proyecto.id}>
             <h3>{proyecto.titulo}</h3>
             <p>{proyecto.descripcion}</p>
+            <p>Autor: {proyecto.autor || "Desconocido"}</p>
             <p>
               Fecha de creación:{" "}
               {new Date(proyecto.fechaCreacion).toLocaleDateString()}
@@ -154,7 +185,6 @@ const Home = () => {
           </li>
         ))}
       </ul>
-      <button onClick={handleLogout}>Cerrar Sesión</button>
     </div>
   );
 };
