@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import appFirebase from "../credenciales";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { ThemeContext } from "../contexts/ThemeContext";
+import ThemeToggle from "./ThemeToggle";
 import "./Auth.css";
 
 const auth = getAuth(appFirebase);
@@ -9,6 +11,7 @@ const auth = getAuth(appFirebase);
 const Login = ({ setUsuario }) => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { darkMode } = useContext(ThemeContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -31,6 +34,9 @@ const Login = ({ setUsuario }) => {
 
   return (
     <div className="auth-container">
+      <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
+        <ThemeToggle />
+      </div>
       <h2>Inicio de Sesión</h2>
       <form onSubmit={handleLogin}>
         <input
@@ -51,6 +57,11 @@ const Login = ({ setUsuario }) => {
       <p>
         ¿No tienes cuenta?{" "}
         <button onClick={() => navigate("/register")}>Regístrate</button>
+      </p>
+      <p style={{ marginTop: '10px' }}>
+        <button onClick={() => navigate("/")} style={{ color: 'var(--primary)' }}>
+          Volver al inicio
+        </button>
       </p>
     </div>
   );

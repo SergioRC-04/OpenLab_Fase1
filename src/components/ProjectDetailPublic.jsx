@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import appFirebase from "../credenciales";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import "./home-details.css";
+import ThemeToggle from './ThemeToggle';
 
 const db = getFirestore(appFirebase);
 
@@ -92,12 +93,13 @@ const ProjectDetailPublic = ({ usuario }) => {
           <div className="logo-section" onClick={() => navigate("/")} style={{cursor: "pointer"}}>
             <h1>Mi OpenLab</h1>
           </div>
-          <div className="user-section">
-            <button className="logout-btn" onClick={() => navigate("/explore")}>
-              <i className="fas fa-arrow-left"></i>
-              <span>Volver a Explorar</span>
-            </button>
-          </div>
+        <div className="user-section">
+  <ThemeToggle />
+  <button className="logout-btn" onClick={() => navigate("/explore")}>
+    <i className="fas fa-arrow-left"></i>
+    <span>Volver a Explorar</span>
+  </button>
+</div>
         </div>
       </header>
       

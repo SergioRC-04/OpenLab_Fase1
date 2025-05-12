@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useState, useContext } from "react"; // Añadir useContext aquí
+import appFirebase from "../credenciales";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, doc, setDoc } from "firebase/firestore"; 
 import { useNavigate } from "react-router-dom";
-import "./Auth.css"; // Using your existing Auth.css that contains landing page styles
+import "./Auth.css";
+import { ThemeContext } from "../contexts/ThemeContext";
+import ThemeToggle from "./ThemeToggle";
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { darkMode } = useContext(ThemeContext);
 
   return (
     <div className="landing-page">
@@ -11,15 +17,15 @@ const LandingPage = () => {
       <header className="header">
         <div className="container">
           <div className="logo">Mi OpenLab</div>
-         <nav className="nav">
-  <ul>
-    <li><a href="#features">Características</a></li>
-    <li><a href="#about">¿Qué es?</a></li>
-    <li><button onClick={() => navigate("/explore")} className="nav-button">Explorar Proyectos</button></li>
-    <li><button onClick={() => navigate("/login")} className="nav-button">Iniciar Sesión</button></li>
-  </ul>
-</nav>
-
+          <nav className="nav">
+            <ul>
+              <li><a href="#features">Características</a></li>
+              <li><a href="#about">¿Qué es?</a></li>
+              <li><ThemeToggle /></li>
+              <li><button onClick={() => navigate("/explore")} className="nav-button">Explorar Proyectos</button></li>
+              <li><button onClick={() => navigate("/login")} className="nav-button">Iniciar Sesión</button></li>
+            </ul>
+          </nav>
         </div>
       </header>
 

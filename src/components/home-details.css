@@ -764,3 +764,78 @@ body {
     padding: 20px;
   }
 }
+
+/* Añade estos estilos al final del archivo */
+
+/* Estilos para Dark Mode */
+[data-theme="dark"] .dashboard-container {
+  background-color: var(--background);
+}
+
+[data-theme="dark"] .dashboard-header {
+  background-color: var(--card-bg);
+  box-shadow: 0 2px 10px var(--shadow);
+}
+
+[data-theme="dark"] .logo-section h1 {
+  color: var(--neutral-dark);
+}
+
+[data-theme="dark"] .dashboard-main {
+  background-color: var(--background);
+}
+
+[data-theme="dark"] .welcome-text h2,
+[data-theme="dark"] .projects-section h3 {
+  color: var(--neutral-dark);
+}
+
+[data-theme="dark"] .form-container {
+  background-color: var(--card-bg);
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+[data-theme="dark"] .form-group label {
+  color: var(--neutral-dark);
+}
+
+[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group textarea {
+  background-color: var(--neutral-light);
+  color: var(--text);
+  border-color: var(--card-border);
+}
+
+[data-theme="dark"] .project-card {
+  background-color: var(--card-bg);
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+[data-theme="dark"] .project-card h4 {
+  color: var(--neutral-dark);
+}
+
+[data-theme="dark"] .project-description {
+  color: var(--neutral-dark);
+}
+
+[data-theme="dark"] .tech-tag {
+  background-color: var(--neutral-light);
+  color: var(--primary-light);
+}
+
+[data-theme="dark"] .dashboard-footer {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .project-detail-card {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .project-detail-body {
+  background-color: var(--neutral-light);
+}
+
+[data-theme="dark"] .empty-projects {
+  background-color: var(--card-bg);
+}

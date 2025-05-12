@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react"; // Añadir useContext aquí
 import appFirebase from "../credenciales";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; // Importar Firestore
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
+import { ThemeContext } from "../contexts/ThemeContext";
+import ThemeToggle from "./ThemeToggle";
 
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase); // Inicializar Firestore
-
 const Register = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { darkMode } = useContext(ThemeContext);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -53,8 +55,11 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-container">
-      <h2>Registro</h2>
+   <div className="auth-container">
+  <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
+    <ThemeToggle />
+  </div>
+  <h2>Registro</h2>
       <form onSubmit={handleRegister}>
         <input type="text" name="nombre" placeholder="Nombre" required />
         <input type="text" name="apellido" placeholder="Apellido" required />

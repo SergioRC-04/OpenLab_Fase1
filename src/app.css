@@ -58,3 +58,47 @@ textarea {
 .mb-2 { margin-bottom: 1rem; }
 .mb-3 { margin-bottom: 1.5rem; }
 .mb-4 { margin-bottom: 2rem; }
+:root {
+  --primary: #4a6fa5;
+  --primary-light: #6e8fc8;
+  --primary-dark: #345280;
+  --accent: #f8b400;
+  --neutral-light: #f8f9fa;
+  --neutral-mid: #e9ecef;
+  --neutral-dark: #495057;
+  
+  /* Nuevas variables para ambos modos */
+  --background: #f0f2f5;
+  --text: #333333;
+  --card-bg: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.1);
+  --shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Variables para modo oscuro */
+[data-theme="dark"] {
+  --primary: #6e8fc8;
+  --primary-light: #8ba7d3;
+  --primary-dark: #4a6fa5;
+  --accent: #ffc107;
+  --neutral-light: #333333;
+  --neutral-mid: #444444;
+  --neutral-dark: #e9ecef;
+  
+  --background: #121212;
+  --text: #e9ecef;
+  --card-bg: #1e1e1e;
+  --card-border: rgba(255, 255, 255, 0.1);
+  --shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* Aplicar tema al body */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Resto del código CSS existente */

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import appFirebase from "../credenciales";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import "./home-details.css";
+import ThemeToggle from './ThemeToggle';
 
 const db = getFirestore(appFirebase);
 
@@ -40,10 +41,11 @@ const ExploreProjects = ({ usuario }) => {
           <div className="logo-section" onClick={() => navigate("/")} style={{cursor: "pointer"}}>
             <h1>Mi OpenLab</h1>
           </div>
-          <div className="user-section">
-            {usuario ? (
-              <>
-                <div className="user-info">
+       <div className="user-section">
+  <ThemeToggle />
+  {usuario ? (
+    <>
+      <div className="user-info">
                   <span className="user-name">{usuario.email.split('@')[0]}</span>
                   <span className="user-email">{usuario.email}</span>
                 </div>

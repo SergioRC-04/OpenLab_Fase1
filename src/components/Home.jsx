@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import "./home-details.css";
+import ThemeToggle from './ThemeToggle';
+
 
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
@@ -92,13 +94,14 @@ const Home = ({ usuario }) => {
           <div className="logo-section">
             <h1>Mi OpenLab</h1>
           </div>
-          <div className="user-section">
-            {usuario && (
-              <>
-                <div className="user-info">
-                  <span className="user-name">{usuario.email.split('@')[0]}</span>
-                  <span className="user-email">{usuario.email}</span>
-                </div>
+         <div className="user-section">
+          {usuario && (
+            <>
+              <ThemeToggle />
+              <div className="user-info">
+                <span className="user-name">{usuario.email.split('@')[0]}</span>
+                <span className="user-email">{usuario.email}</span>
+              </div>
                 <div className="user-avatar">
                   <span>{usuario.email[0].toUpperCase()}</span>
                 </div>
