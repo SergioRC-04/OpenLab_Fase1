@@ -15,18 +15,28 @@ const MyProjects = () => {
 
   const proyectosRef = collection(db, "proyectos");
 
-  useEffect(() => {
+   useEffect(() => {
     const cargarMisProyectos = async () => {
-      const userId = auth.currentUser.uid;
-      const q = query(proyectosRef, where("userId", "==", userId));
-      const querySnapshot = await getDocs(q);
-      const proyectosCargados = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setProyectos(proyectosCargados);
+      if (!auth.currentUser) return;
+      
+      setIsLoading(true);
+      try {
+        const userId = auth.currentUser.uid;
+        const proyectosRef = collection(db, "proyectos");
+        const usuario = auth.currentUser.uid;
+        const q = query(proyectosRef, where("usuario", "==", userId));
+        const querySnapshot = await getDocs(q);
+        const proyectosCargados = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProyectos(proyectosCargados);
+      } catch (error) {
+        console.error("Error cargando proyectos:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
-
     cargarMisProyectos();
   }, []);
 
