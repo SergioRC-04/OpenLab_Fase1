@@ -18,18 +18,26 @@ const Home = ({ usuario }) => {
   const [tecnologias, setTecnologias] = useState("");
   const [colaboradores, setColaboradores] = useState("");
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const proyectosRef = collection(db, "proyectos");
 
   // Cargar todos los proyectos sin importar el usuario
   useEffect(() => {
     const cargarProyectos = async () => {
-      const querySnapshot = await getDocs(proyectosRef);
-      const proyectosCargados = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setProyectos(proyectosCargados);
+      setIsLoading(true);
+      try {
+        const querySnapshot = await getDocs(proyectosRef);
+        const proyectosCargados = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setProyectos(proyectosCargados);
+      } catch (error) {
+        console.error("Error cargando proyectos:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     cargarProyectos();
@@ -40,151 +48,243 @@ const Home = ({ usuario }) => {
     if (!titulo || !descripcion) return;
 
     try {
-      // Solo obtenemos el userId/autor si hay sesión iniciada
-      // (aunque la lógica actual asume que "usuario" existe).
-      const userId = auth.currentUser?.uid || "invitado";
-      let autor = "Anónimo";
-      if (userId !== "invitado") {
-        const userDoc = await getDoc(doc(db, "usuarios", userId));
-        autor = userDoc.exists()
-          ? `${userDoc.data().nombre} ${userDoc.data().apellido}`
-          : "Anónimo";
-      }
-
-      const nuevoProyecto = await addDoc(proyectosRef, {
+      const nuevoProyecto = {
         titulo,
         descripcion,
-        fechaCreacion: new Date().toISOString(),
-        imagen,
-        tecnologias: tecnologias.split(",").map((tec) => tec.trim()),
-        colaboradores: colaboradores.split(",").map((col) => col.trim()),
-        userId,
-        autor,
-      });
+        imagen: imagen || "https://via.placeholder.com/300x200?text=Proyecto",
+        tecnologias: tecnologias ? tecnologias.split(",").map(t => t.trim()) : [],
+        colaboradores: colaboradores ? colaboradores.split(",").map(c => c.trim()) : [],
+        fecha: new Date().toISOString(),
+        usuario: usuario ? usuario.uid : "anónimo",
+        nombreUsuario: usuario ? usuario.email.split('@')[0] : "anónimo",
+        estado: "En desarrollo"
+      };
 
-      setProyectos((prevProyectos) => [
-        ...prevProyectos,
-        {
-          id: nuevoProyecto.id,
-          titulo,
-          descripcion,
-          fechaCreacion: new Date().toISOString(),
-          imagen,
-          tecnologias: tecnologias.split(",").map((tec) => tec.trim()),
-          colaboradores: colaboradores.split(",").map((col) => col.trim()),
-          autor,
-        },
-      ]);
-
-      // Limpiar el formulario
+      const docRef = await addDoc(proyectosRef, nuevoProyecto);
+      setProyectos([...proyectos, { id: docRef.id, ...nuevoProyecto }]);
+      
+      // Reset form fields
       setTitulo("");
       setDescripcion("");
       setImagen("");
       setTecnologias("");
       setColaboradores("");
       setMostrarFormulario(false);
-      alert("Proyecto creado exitosamente");
+      
     } catch (error) {
-      console.error("Error al crear el proyecto:", error);
+      console.error("Error creando el proyecto:", error);
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      navigate("/login");
-    } catch (error) {
-      console.error("Error al cerrar sesión:", error);
-    }
+  const handleCerrarSesion = () => {
+    signOut(auth).then(() => {
+      navigate("/");
+    });
   };
 
   return (
-    <div className="container">
-      <h2>Proyectos</h2>
-
-      {/* Si NO hay usuario, mostrar "Iniciar Sesión" y "Registrarse" */}
-      {!usuario && (
-        <div style={{ marginBottom: "20px" }}>
-          <button onClick={() => navigate("/login")}>Iniciar Sesión</button>
-          <button onClick={() => navigate("/register")}>Registrarse</button>
+    <div className="dashboard-container">
+      {/* Header with user info */}
+      <header className="dashboard-header">
+        <div className="header-content">
+          <div className="logo-section">
+            <h1>Mi OpenLab</h1>
+          </div>
+          <div className="user-section">
+            {usuario && (
+              <>
+                <div className="user-info">
+                  <span className="user-name">{usuario.email.split('@')[0]}</span>
+                  <span className="user-email">{usuario.email}</span>
+                </div>
+                <div className="user-avatar">
+                  <span>{usuario.email[0].toUpperCase()}</span>
+                </div>
+                <button className="logout-btn" onClick={handleCerrarSesion}>
+                  <i className="fas fa-sign-out-alt"></i>
+                  <span>Cerrar sesión</span>
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      )}
+      </header>
 
-      {/* Si hay usuario, mostrar "Mis proyectos", "Crear proyecto" y "Cerrar Sesión" */}
-      {usuario && (
-        <div style={{ marginBottom: "20px" }}>
-          <button onClick={() => navigate("/my-projects")}>
-            Mis proyectos
+      {/* Main content */}
+      <main className="dashboard-main">
+        <div className="dashboard-welcome">
+          <div className="welcome-text">
+            <h2>Bienvenido a tu espacio creativo, {usuario ? usuario.email.split('@')[0] : "Usuario"}</h2>
+            <p>Crea, gestiona y comparte tus proyectos con la comunidad.</p>
+          </div>
+          <button 
+            className={`new-project-btn ${mostrarFormulario ? 'active' : ''}`}
+            onClick={() => setMostrarFormulario(!mostrarFormulario)}
+          >
+            {mostrarFormulario ? (
+              <>
+                <i className="fas fa-times"></i>
+                <span>Cancelar</span>
+              </>
+            ) : (
+              <>
+                <i className="fas fa-plus"></i>
+                <span>Nuevo Proyecto</span>
+              </>
+            )}
           </button>
-          {!mostrarFormulario && (
-            <button onClick={() => setMostrarFormulario(true)}>
-              Crear Proyecto
-            </button>
+        </div>
+
+        {/* New project form */}
+        {mostrarFormulario && (
+          <div className="form-container">
+            <h3>Crear nuevo proyecto</h3>
+            <form onSubmit={handleCrearProyecto} className="project-form">
+              <div className="form-group">
+                <label htmlFor="titulo">Título del proyecto <span className="required">*</span></label>
+                <input
+                  type="text"
+                  id="titulo"
+                  value={titulo}
+                  onChange={(e) => setTitulo(e.target.value)}
+                  placeholder="Ej: App de gestión de tareas"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="descripcion">Descripción <span className="required">*</span></label>
+                <textarea
+                  id="descripcion"
+                  value={descripcion}
+                  onChange={(e) => setDescripcion(e.target.value)}
+                  placeholder="Describe tu proyecto en detalle"
+                  rows="4"
+                  required
+                ></textarea>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="imagen">URL de imagen (opcional)</label>
+                <input
+                  type="url"
+                  id="imagen"
+                  value={imagen}
+                  onChange={(e) => setImagen(e.target.value)}
+                  placeholder="https://ejemplo.com/imagen.jpg"
+                />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="tecnologias">Tecnologías (separadas por comas)</label>
+                  <input
+                    type="text"
+                    id="tecnologias"
+                    value={tecnologias}
+                    onChange={(e) => setTecnologias(e.target.value)}
+                    placeholder="React, Firebase, CSS"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="colaboradores">Colaboradores (separados por comas)</label>
+                  <input
+                    type="text"
+                    id="colaboradores"
+                    value={colaboradores}
+                    onChange={(e) => setColaboradores(e.target.value)}
+                    placeholder="juan@email.com, maria@email.com"
+                  />
+                </div>
+              </div>
+
+              <div className="form-actions">
+                <button type="button" className="cancel-btn" onClick={() => setMostrarFormulario(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" className="submit-btn">
+                  <i className="fas fa-save"></i> Guardar Proyecto
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        {/* Projects display */}
+        <div className="projects-section">
+          <h3>Proyectos Destacados</h3>
+          
+          {isLoading ? (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>Cargando proyectos...</p>
+            </div>
+          ) : proyectos.length === 0 ? (
+            <div className="empty-projects">
+              <i className="fas fa-folder-open empty-icon"></i>
+              <h4>Aún no hay proyectos</h4>
+              <p>¡Crea tu primer proyecto haciendo clic en "Nuevo Proyecto"!</p>
+            </div>
+          ) : (
+            <div className="projects-grid">
+              {proyectos.map((proyecto) => (
+                <div className="project-card" key={proyecto.id}>
+                  <div 
+                    className="project-image" 
+                    style={{ backgroundImage: `url(${proyecto.imagen || "https://via.placeholder.com/300x200?text=Proyecto"})` }}
+                  >
+                    <div className="project-status">{proyecto.estado}</div>
+                  </div>
+                  <div className="project-content">
+                    <h4>{proyecto.titulo}</h4>
+                    <p className="project-description">{proyecto.descripcion.length > 100 
+                      ? proyecto.descripcion.substring(0, 100) + "..." 
+                      : proyecto.descripcion}
+                    </p>
+                    
+                    {proyecto.tecnologias && proyecto.tecnologias.length > 0 && (
+                      <div className="project-tech">
+                        {proyecto.tecnologias.map((tech, index) => (
+                          <span key={index} className="tech-tag">{tech}</span>
+                        ))}
+                      </div>
+                    )}
+                    
+                    <div className="project-footer">
+                      <div className="project-author">
+                        <div className="author-avatar">
+                          {(proyecto.nombreUsuario || "A")[0].toUpperCase()}
+                        </div>
+                        <span>{proyecto.nombreUsuario || "Anónimo"}</span>
+                      </div>
+                      
+                      <button 
+                        className="view-details-btn"
+                        onClick={() => navigate(`/proyecto/${proyecto.id}`)}
+                      >
+                        Ver detalles
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
-          <button onClick={handleLogout}>Cerrar Sesión</button>
         </div>
-      )}
+      </main>
 
-      {/* Formulario visible sólo si hay usuario y se presionó "Crear Proyecto" */}
-      {usuario && mostrarFormulario && (
-        <form onSubmit={handleCrearProyecto}>
-          <input
-            type="text"
-            placeholder="Título"
-            value={titulo}
-            onChange={(e) => setTitulo(e.target.value)}
-            required
-          />
-          <textarea
-            placeholder="Descripción"
-            value={descripcion}
-            onChange={(e) => setDescripcion(e.target.value)}
-            required
-          ></textarea>
-          <input
-            type="text"
-            placeholder="URL de la imagen"
-            value={imagen}
-            onChange={(e) => setImagen(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Tecnologías (separadas por comas)"
-            value={tecnologias}
-            onChange={(e) => setTecnologias(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Colaboradores (separados por comas)"
-            value={colaboradores}
-            onChange={(e) => setColaboradores(e.target.value)}
-          />
-          <button type="submit">Guardar Proyecto</button>
-          <button type="button" onClick={() => setMostrarFormulario(false)}>
-            Cancelar
-          </button>
-        </form>
-      )}
-
-      {/* Lista de todos los proyectos */}
-      <ul>
-        {proyectos.map((proyecto) => (
-          <li key={proyecto.id}>
-            <h3>{proyecto.titulo}</h3>
-            <p>{proyecto.descripcion}</p>
-            <p>Autor: {proyecto.autor || "Desconocido"}</p>
-            <p>
-              Fecha de creación:{" "}
-              {new Date(proyecto.fechaCreacion).toLocaleDateString()}
-            </p>
-            <p>Tecnologías: {proyecto.tecnologias?.join(", ")}</p>
-            <p>Colaboradores: {proyecto.colaboradores?.join(", ")}</p>
-            <button onClick={() => navigate(`/proyecto/${proyecto.id}`)}>
-              Ver Detalles
-            </button>
-          </li>
-        ))}
-      </ul>
+      {/* Footer */}
+      <footer className="dashboard-footer">
+        <div className="footer-content">
+          <p>&copy; 2025 Mi OpenLab | Todos los derechos reservados</p>
+          <div className="footer-links">
+            <a href="#">Términos</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Ayuda</a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

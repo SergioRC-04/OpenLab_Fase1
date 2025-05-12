@@ -6,6 +6,8 @@ import ProjectDetail from "./components/ProjectDetail";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
+import LandingPage from "./components/LandingPage"; // Import the new component
+import "./App.css";
 
 function App() {
   const [usuario, setUsuario] = useState(null);
@@ -13,8 +15,11 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Ruta pública para LandingPage */}
+        <Route path="/" element={<LandingPage />} /> {/* Set LandingPage as home */}
+
         {/* Ruta pública para Home */}
-        <Route path="/" element={<Home usuario={usuario} />} />
+        <Route path="/home" element={<Home usuario={usuario} />} />
 
         {/* Ruta protegida para Mis Proyectos */}
         <Route

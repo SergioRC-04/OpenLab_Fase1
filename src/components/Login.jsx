@@ -23,7 +23,7 @@ const Login = ({ setUsuario }) => {
       );
       setUsuario(userCredential.user); // Guarda el usuario en el estado global
       setError(""); // Limpia errores si el inicio de sesión es exitoso
-      navigate("/"); // Redirige a Home
+      navigate("/home"); // Cambiar esto de "/" a "/home" para redirigir correctamente
     } catch {
       setError("El correo o la contraseña son incorrectos.");
     }
@@ -45,7 +45,7 @@ const Login = ({ setUsuario }) => {
           placeholder="Contraseña"
           required
         />
-        {error && <p>{error}</p>}
+        {error && <p className="error">{error}</p>}
         <button type="submit">Iniciar Sesión</button>
       </form>
       <p>
