@@ -6,7 +6,9 @@ import ProjectDetail from "./components/ProjectDetail";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LandingPage from "./components/LandingPage"; // Import the new component
+import LandingPage from "./components/LandingPage"; 
+import ExploreProjects from "./components/ExploreProjects"; // Importar nuevo componente
+import ProjectDetailPublic from "./components/ProjectDetailPublic"; // Importar nuevo componente
 import "./App.css";
 
 function App() {
@@ -16,12 +18,16 @@ function App() {
     <Router>
       <Routes>
         {/* Ruta pública para LandingPage */}
-        <Route path="/" element={<LandingPage />} /> {/* Set LandingPage as home */}
+        <Route path="/" element={<LandingPage />} />
+
+        {/* Nuevas rutas para explorar proyectos - accesibles sin login */}
+        <Route path="/explore" element={<ExploreProjects usuario={usuario} />} />
+        <Route path="/project-details/:id" element={<ProjectDetailPublic usuario={usuario} />} />
 
         {/* Ruta pública para Home */}
         <Route path="/home" element={<Home usuario={usuario} />} />
 
-        {/* Ruta protegida para Mis Proyectos */}
+        {/* Rutas protegidas */}
         <Route
           path="/my-projects"
           element={
@@ -31,7 +37,6 @@ function App() {
           }
         />
 
-        {/* Ruta protegida para Detalle de Proyecto */}
         <Route
           path="/proyecto/:id"
           element={

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import appFirebase from "../credenciales";
 import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs, addDoc, getDoc, doc } from "firebase/firestore";
+import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import "./home-details.css";
 
@@ -20,14 +20,16 @@ const Home = ({ usuario }) => {
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const proyectosRef = collection(db, "proyectos");
-
-  // Cargar todos los proyectos sin importar el usuario
+  // Cargar solo los proyectos del usuario actual
   useEffect(() => {
-    const cargarProyectos = async () => {
+    const cargarMisProyectos = async () => {
+      if (!usuario) return;
+      
       setIsLoading(true);
       try {
-        const querySnapshot = await getDocs(proyectosRef);
+        const proyectosRef = collection(db, "proyectos");
+        const q = query(proyectosRef, where("usuario", "==", usuario.uid));
+        const querySnapshot = await getDocs(q);
         const proyectosCargados = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -40,8 +42,8 @@ const Home = ({ usuario }) => {
       }
     };
 
-    cargarProyectos();
-  }, []);
+    cargarMisProyectos();
+  }, [usuario]);
 
   const handleCrearProyecto = async (e) => {
     e.preventDefault();
@@ -60,7 +62,7 @@ const Home = ({ usuario }) => {
         estado: "En desarrollo"
       };
 
-      const docRef = await addDoc(proyectosRef, nuevoProyecto);
+      const docRef = await addDoc(collection(db, "proyectos"), nuevoProyecto);
       setProyectos([...proyectos, { id: docRef.id, ...nuevoProyecto }]);
       
       // Reset form fields
@@ -100,6 +102,10 @@ const Home = ({ usuario }) => {
                 <div className="user-avatar">
                   <span>{usuario.email[0].toUpperCase()}</span>
                 </div>
+                <button className="explore-btn" onClick={() => navigate("/explore")}>
+                  <i className="fas fa-compass"></i>
+                  <span>Explorar</span>
+                </button>
                 <button className="logout-btn" onClick={handleCerrarSesion}>
                   <i className="fas fa-sign-out-alt"></i>
                   <span>Cerrar sesión</span>
@@ -211,19 +217,19 @@ const Home = ({ usuario }) => {
           </div>
         )}
 
-        {/* Projects display */}
+        {/* Projects display - SOLO MIS PROYECTOS */}
         <div className="projects-section">
-          <h3>Proyectos Destacados</h3>
+          <h3>Mis Proyectos</h3>
           
           {isLoading ? (
             <div className="loading-container">
               <div className="loading-spinner"></div>
-              <p>Cargando proyectos...</p>
+              <p>Cargando tus proyectos...</p>
             </div>
           ) : proyectos.length === 0 ? (
             <div className="empty-projects">
               <i className="fas fa-folder-open empty-icon"></i>
-              <h4>Aún no hay proyectos</h4>
+              <h4>No tienes ningún proyecto creado aún</h4>
               <p>¡Crea tu primer proyecto haciendo clic en "Nuevo Proyecto"!</p>
             </div>
           ) : (
@@ -260,10 +266,10 @@ const Home = ({ usuario }) => {
                       </div>
                       
                       <button 
-                        className="view-details-btn"
+                        className="edit-btn"
                         onClick={() => navigate(`/proyecto/${proyecto.id}`)}
                       >
-                        Ver detalles
+                        Editar
                       </button>
                     </div>
                   </div>

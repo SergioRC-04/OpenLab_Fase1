@@ -11,13 +11,15 @@ const LandingPage = () => {
       <header className="header">
         <div className="container">
           <div className="logo">Mi OpenLab</div>
-          <nav className="nav">
-            <ul>
-              <li><a href="#features">Características</a></li>
-              <li><a href="#about">¿Qué es?</a></li>
-              <li><button onClick={() => navigate("/login")} className="nav-button">Iniciar Sesión</button></li>
-            </ul>
-          </nav>
+         <nav className="nav">
+  <ul>
+    <li><a href="#features">Características</a></li>
+    <li><a href="#about">¿Qué es?</a></li>
+    <li><button onClick={() => navigate("/explore")} className="nav-button">Explorar Proyectos</button></li>
+    <li><button onClick={() => navigate("/login")} className="nav-button">Iniciar Sesión</button></li>
+  </ul>
+</nav>
+
         </div>
       </header>
 
@@ -28,9 +30,10 @@ const LandingPage = () => {
             <h1>Crea, Comparte y Explora Proyectos en Mi OpenLab</h1>
             <p className="subtitle">Un espacio para makers, estudiantes y desarrolladores que quieren construir y mostrar sus ideas.</p>
             <p className="subheadline">Gestiona tus proyectos, colabora con otros y descubre lo que está creando la comunidad.</p>
-            <div className="cta-buttons">
-              <button onClick={() => navigate("/register")} className="btn primary">Registrarse Gratis</button>
-            </div>
+          <div className="cta-buttons">
+  <button onClick={() => navigate("/register")} className="btn primary">Registrarse Gratis</button>
+  <button onClick={() => navigate("/explore")} className="btn secondary">Explorar Proyectos</button>
+</div>
           </div>
         </div>
       </section>
