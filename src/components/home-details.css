@@ -839,3 +839,206 @@ body {
 [data-theme="dark"] .empty-projects {
   background-color: var(--card-bg);
 }
+
+.edit-btn {
+  background-color: var(--primary-light);
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.edit-btn:hover {
+  background-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.edit-btn:active {
+  transform: translateY(0);
+}
+
+/* Soporte para Dark Mode */
+[data-theme="dark"] .edit-btn {
+  background-color: var(--primary-light);
+  color: white;
+}
+
+[data-theme="dark"] .edit-btn:hover {
+  background-color: var(--primary);
+}
+
+/* Estilos para la página de edición de proyectos */
+.project-edit-container {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 5px 20px var(--shadow);
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.project-edit-header {
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--neutral-mid);
+  padding-bottom: 15px;
+}
+
+.project-edit-header h2 {
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+
+.project-edit-header p {
+  color: var(--neutral-dark);
+  opacity: 0.8;
+}
+
+.project-edit-form .form-group {
+  margin-bottom: 20px;
+}
+
+.project-edit-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--neutral-dark);
+}
+
+.project-edit-form input,
+.project-edit-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--neutral-mid);
+  border-radius: 8px;
+  background-color: var(--neutral-light);
+  font-family: inherit;
+  transition: border-color 0.3s;
+}
+
+.project-edit-form input:focus,
+.project-edit-form textarea:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(74, 111, 165, 0.25);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.imagen-preview {
+  margin-top: 10px;
+  border-radius: 8px;
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.imagen-preview img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--neutral-mid);
+}
+
+.right-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.save-btn {
+  background-color: var(--success);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.save-btn:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.save-btn:active {
+  transform: translateY(0);
+}
+
+.delete-btn {
+  background-color: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.delete-btn:hover {
+  background-color: var(--danger);
+  color: white;
+}
+
+.cancel-btn {
+  background-color: var(--neutral-mid);
+  color: var(--neutral-dark);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cancel-btn:hover {
+  background-color: var(--neutral-light);
+}
+
+/* Dark mode support */
+[data-theme="dark"] .project-edit-container {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .project-edit-form input,
+[data-theme="dark"] .project-edit-form textarea {
+  background-color: var(--neutral-light);
+  color: var(--text);
+  border-color: var(--card-border);
+}
+
+[data-theme="dark"] .project-edit-header h2,
+[data-theme="dark"] .project-edit-form label {
+  color: var(--neutral-dark);
+}
+
+[data-theme="dark"] .cancel-btn {
+  background-color: var(--neutral-mid);
+  color: var(--text);
+}

@@ -272,7 +272,7 @@ const Home = ({ usuario }) => {
                         className="edit-btn"
                         onClick={() => navigate(`/proyecto/${proyecto.id}`)}
                       >
-                        Editar
+                        <i className="fas fa-edit"></i> Editar
                       </button>
                     </div>
                   </div>
