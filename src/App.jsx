@@ -27,7 +27,7 @@ function App() {
           <Route path="/project-details/:id" element={<ProjectDetailPublic usuario={usuario} />} />
 
           {/* Ruta pública para Home */}
-          <Route path="/home" element={<Home usuario={usuario} />} />
+          <Route path="/home" element={<Home setUsuario={setUsuario} usuario={usuario} />} />
 
           {/* Rutas protegidas */}
           <Route

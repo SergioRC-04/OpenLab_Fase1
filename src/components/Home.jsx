@@ -11,7 +11,7 @@ import ThemeToggle from './ThemeToggle';
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
 
-const Home = ({ usuario }) => {
+const Home = ({ usuario, setUsuario }) => {
   const navigate = useNavigate();
   const [proyectos, setProyectos] = useState([]);
   const [titulo, setTitulo] = useState("");
@@ -84,6 +84,7 @@ const Home = ({ usuario }) => {
     signOut(auth).then(() => {
       navigate("/");
     });
+    setUsuario(null); 
   };
 
   return (
