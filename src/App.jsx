@@ -16,6 +16,10 @@ import Profile from "./components/Profile";
 import { initReputacionUsuario } from "./utils/initReputacion";
 import { corregirLikesExistentes } from "./utils/likesManager";
 import RankingPage from "./components/RankingPage";
+import CreateCommunity from "./components/CreateCommunity";
+import CommunitiesPage from "./components/CommunitiesPage";
+import CommunityDetail from "./components/CommunityDetail";
+import DiscussionDetail from "./components/DiscussionDetail";
 
 function App() {
   const [usuario, setUsuario] = useState(null);
@@ -130,6 +134,22 @@ function App() {
             path="/ranking" 
             element=
                {<RankingPage usuario={usuario} />}
+          />
+          <Route
+            path="/create-community"
+            element={<CreateCommunity usuario={usuario} />}
+          />
+          <Route
+            path="/communities"
+            element={<CommunitiesPage usuario={usuario} />}
+          />
+          <Route
+            path="/communities/:communityId"
+            element={<CommunityDetail usuario={usuario} />}
+          />
+          <Route
+            path="/discussions/:discussionId"
+            element={<DiscussionDetail usuario={usuario} />}
           />
         </Routes>
       </Router>

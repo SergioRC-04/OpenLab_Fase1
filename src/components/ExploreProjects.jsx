@@ -96,6 +96,10 @@ const ExploreProjects = ({ usuario }) => {
                   <i className="fas fa-home"></i>
                   <span>Mi Dashboard</span>
                 </button>
+                <button className="nav-btn" onClick={() => navigate("/communities")}>
+                  <i className="fas fa-users"></i>
+                  <span>Comunidades</span>
+                </button>
                 <button className="logout-btn" onClick={() => navigate("/")}>
                   <i className="fas fa-arrow-left"></i>
                   <span>Volver</span>
@@ -106,6 +110,12 @@ const ExploreProjects = ({ usuario }) => {
                 <button className="nav-button" onClick={() => navigate("/login")}>
                   Iniciar Sesión
                 </button>
+                
+                {/* Nuevo botón aquí */}
+                <button className="nav-button" onClick={() => navigate("/communities")}>
+                  <i className="fas fa-users"></i> Comunidades
+                </button>
+                
                 <button className="nav-button" onClick={() => navigate("/")}>
                   <i className="fas fa-arrow-left"></i> Volver
                 </button>
@@ -122,6 +132,41 @@ const ExploreProjects = ({ usuario }) => {
             <h2>Proyectos Destacados</h2>
             <p>Descubre lo que la comunidad de Mi OpenLab está creando.</p>
           </div>
+        </div>
+
+        {/* Acciones destacadas */}
+        <div
+          className="explore-actions"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            margin: "20px 0",
+            gap: "15px",
+          }}
+        >
+          <button
+            className="big-action-btn"
+            onClick={() => navigate("/communities")}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              padding: "12px 24px",
+              backgroundColor: "var(--primary, #007bff)",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              fontSize: "16px",
+              fontWeight: "600",
+              cursor: "pointer",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              transition: "all 0.2s ease",
+            }}
+            onMouseOver={(e) => (e.target.style.transform = "translateY(-2px)")}
+            onMouseOut={(e) => (e.target.style.transform = "translateY(0)")}
+          >
+            <i className="fas fa-users"></i> Explorar Comunidades
+          </button>
         </div>
 
         {/* Filtros y búsqueda */}
