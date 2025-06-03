@@ -149,7 +149,17 @@ const ExploreProjects = ({ usuario }) => {
                       )}
 
                     <div className="project-footer">
-                      <div className="project-author">
+                      <div 
+                        className="project-author" 
+                        onClick={(e) => {
+                          e.stopPropagation(); // Evitar que se active el clic de toda la tarjeta
+                          if (proyecto.usuario) {
+                            navigate(`/profile/${proyecto.usuario}`);
+                          }
+                        }}
+                        style={{ cursor: proyecto.usuario ? "pointer" : "default" }}
+                        title={proyecto.usuario ? "Ver perfil" : ""}
+                      >
                         <div className="author-avatar">
                           {(proyecto.nombreUsuario ||
                             proyecto.autor ||
@@ -161,7 +171,6 @@ const ExploreProjects = ({ usuario }) => {
                             "Anónimo"}
                         </span>
                       </div>
-
                       {/* Solo mostrar el botón Ver Detalles, sin importar quién creó el proyecto */}
                       <button
                         className="view-details-btn"
