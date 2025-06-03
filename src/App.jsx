@@ -20,6 +20,8 @@ import CreateCommunity from "./components/CreateCommunity";
 import CommunitiesPage from "./components/CommunitiesPage";
 import CommunityDetail from "./components/CommunityDetail";
 import DiscussionDetail from "./components/DiscussionDetail";
+import CommentSection from './components/CommentSection';
+import FavoriteButton from './components/FavoriteButton';
 
 function App() {
   const [usuario, setUsuario] = useState(null);
