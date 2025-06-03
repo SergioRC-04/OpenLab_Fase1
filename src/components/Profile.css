@@ -1,3 +1,211 @@
+/* Estilos existentes del Profile.css + nuevos estilos CV */
+
+/* Contenedor principal del CV */
+.cv-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cv-title {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+/* Secciones del CV */
+.cv-section {
+  margin-bottom: 24px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid #3498db;
+}
+
+.cv-section h4 {
+  color: #34495e;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cv-content {
+  color: #555;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.cv-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  transition: border-color 0.3s ease;
+}
+
+.cv-textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.cv-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.cv-input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+/* Stack tecnológico - badges */
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tech-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.tech-badge:hover {
+  transform: translateY(-1px);
+}
+
+/* Botón de LinkedIn */
+.linkedin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #0077b5;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 119, 181, 0.3);
+}
+
+.linkedin-btn:hover {
+  background: #005885;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 119, 181, 0.4);
+  color: white;
+  text-decoration: none;
+}
+
+.linkedin-btn i {
+  font-size: 16px;
+}
+
+/* Texto muted */
+.text-muted {
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cv-container {
+    padding: 16px;
+    margin: 16px 0;
+  }
+
+  .cv-section {
+    padding: 16px;
+  }
+
+  .cv-title {
+    font-size: 1.3rem;
+  }
+
+  .tech-stack {
+    gap: 6px;
+  }
+
+  .badge {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+}
+
+/* Modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .cv-container {
+    background: #2c3e50;
+    color: #ecf0f1;
+  }
+
+  .cv-section {
+    background: #34495e;
+    border-left-color: #3498db;
+  }
+
+  .cv-title {
+    color: #ecf0f1;
+  }
+
+  .cv-section h4 {
+    color: #bdc3c7;
+  }
+
+  .cv-content {
+    color: #bdc3c7;
+  }
+
+  .cv-textarea,
+  .cv-input {
+    background: #34495e;
+    color: #ecf0f1;
+    border-color: #4a5f7a;
+  }
+
+  .cv-textarea:focus,
+  .cv-input:focus {
+    border-color: #3498db;
+  }
+
+  .text-muted {
+    color: #95a5a6;
+  }
+}
+
+
+
 /* Contenedor principal */
 .profile-container {
   width: 100%;
