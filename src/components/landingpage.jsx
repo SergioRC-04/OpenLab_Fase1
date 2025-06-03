@@ -1,15 +1,20 @@
-import React, { useState, useContext } from "react"; // Añadir useContext aquí
-import appFirebase from "../credenciales";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, doc, setDoc } from "firebase/firestore"; 
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Auth.css";
+import { getAuth, signOut } from "firebase/auth";
 import { ThemeContext } from "../contexts/ThemeContext";
 import ThemeToggle from "./ThemeToggle";
 
-const LandingPage = () => {
+const LandingPage = ({ usuario, setUsuario }) => {
   const navigate = useNavigate();
   const { darkMode } = useContext(ThemeContext);
+
+  // Función local para cerrar sesión
+  const cerrarSesion = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      navigate("/"); // Solo navega, NO llames setUsuario(null)
+    });
+  };
 
   return (
     <div className="landing-page">
@@ -19,11 +24,59 @@ const LandingPage = () => {
           <div className="logo">Mi OpenLab</div>
           <nav className="nav">
             <ul>
-              <li><a href="#features">Características</a></li>
-              <li><a href="#about">¿Qué es?</a></li>
-              <li><ThemeToggle /></li>
-              <li><button onClick={() => navigate("/explore")} className="nav-button">Explorar Proyectos</button></li>
-              <li><button onClick={() => navigate("/login")} className="nav-button">Iniciar Sesión</button></li>
+              <li>
+                <a href="#features">Características</a>
+              </li>
+              <li>
+                <a href="#about">¿Qué es?</a>
+              </li>
+              <li>
+                <ThemeToggle />
+              </li>
+              <li>
+                <button
+                  onClick={() => navigate("/explore")}
+                  className="nav-button"
+                >
+                  Explorar Proyectos
+                </button>
+              </li>
+              {!usuario ? (
+                <>
+                  <li>
+                    <button
+                      onClick={() => navigate("/login")}
+                      className="nav-button"
+                    >
+                      Iniciar Sesión
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => navigate("/register")}
+                      className="nav-button"
+                    >
+                      Registrarse
+                    </button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <button
+                      onClick={() => navigate("/home")}
+                      className="nav-button"
+                    >
+                      Ir a Mi Dashboard
+                    </button>
+                  </li>
+                  <li>
+                    <button onClick={cerrarSesion} className="nav-button">
+                      Cerrar sesión
+                    </button>
+                  </li>
+                </>
+              )}
             </ul>
           </nav>
         </div>
@@ -34,12 +87,28 @@ const LandingPage = () => {
         <div className="container">
           <div className="hero-content">
             <h1>Crea, Comparte y Explora Proyectos en Mi OpenLab</h1>
-            <p className="subtitle">Un espacio para makers, estudiantes y desarrolladores que quieren construir y mostrar sus ideas.</p>
-            <p className="subheadline">Gestiona tus proyectos, colabora con otros y descubre lo que está creando la comunidad.</p>
-          <div className="cta-buttons">
-  <button onClick={() => navigate("/register")} className="btn primary">Registrarse Gratis</button>
-  <button onClick={() => navigate("/explore")} className="btn secondary">Explorar Proyectos</button>
-</div>
+            <p className="subtitle">
+              Un espacio para makers, estudiantes y desarrolladores que quieren
+              construir y mostrar sus ideas.
+            </p>
+            <p className="subheadline">
+              Gestiona tus proyectos, colabora con otros y descubre lo que está
+              creando la comunidad.
+            </p>
+            <div className="cta-buttons">
+              <button
+                onClick={() => navigate("/register")}
+                className="btn primary"
+              >
+                Registrarse Gratis
+              </button>
+              <button
+                onClick={() => navigate("/explore")}
+                className="btn secondary"
+              >
+                Explorar Proyectos
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -48,9 +117,15 @@ const LandingPage = () => {
       <section id="about" className="about">
         <div className="container">
           <h2>¿Qué es Mi OpenLab?</h2>
-          <p className="section-description">Tu laboratorio digital para experimentar, aprender y colaborar.</p>
-          <p>Mi OpenLab es una plataforma donde puedes registrar tus ideas, llevar control de tus avances y compartir tus proyectos con el mundo.</p>
-          
+          <p className="section-description">
+            Tu laboratorio digital para experimentar, aprender y colaborar.
+          </p>
+          <p>
+            Mi OpenLab es una plataforma donde puedes registrar tus ideas,
+            llevar control de tus avances y compartir tus proyectos con el
+            mundo.
+          </p>
+
           <div className="features-list">
             <div className="feature">
               <span className="emoji">🧠</span>
@@ -76,7 +151,10 @@ const LandingPage = () => {
             <div className="card">
               <div className="card-icon">🚀</div>
               <h3>Crea proyectos fácilmente</h3>
-              <p>Con una interfaz intuitiva que se adapta a cualquier tipo de proyecto.</p>
+              <p>
+                Con una interfaz intuitiva que se adapta a cualquier tipo de
+                proyecto.
+              </p>
             </div>
             <div className="card">
               <div className="card-icon">👥</div>
@@ -103,7 +181,10 @@ const LandingPage = () => {
           <h2>Lo que dicen nuestros usuarios</h2>
           <div className="testimonial-container">
             <div className="testimonial">
-              <p className="quote">"Mi OpenLab me ayudó a organizar mis proyectos de universidad y mostrarlos en mi portafolio."</p>
+              <p className="quote">
+                "Mi OpenLab me ayudó a organizar mis proyectos de universidad y
+                mostrarlos en mi portafolio."
+              </p>
               <p className="author">— Carlos M., estudiante de ingeniería</p>
             </div>
           </div>
@@ -114,8 +195,15 @@ const LandingPage = () => {
       <section className="cta-section">
         <div className="container">
           <h2>Empieza a construir tus ideas hoy</h2>
-          <p>No necesitas experiencia previa. ¡Únete gratis y comienza a crear!</p>
-          <button onClick={() => navigate("/register")} className="btn primary large">Crear Cuenta Gratuita</button>
+          <p>
+            No necesitas experiencia previa. ¡Únete gratis y comienza a crear!
+          </p>
+          <button
+            onClick={() => navigate("/register")}
+            className="btn primary large"
+          >
+            Crear Cuenta Gratuita
+          </button>
         </div>
       </section>
 
@@ -131,12 +219,18 @@ const LandingPage = () => {
               <div className="link-group">
                 <h4>Plataforma</h4>
                 <ul>
-                  <li><a href="#features">Características</a></li>
-                  <li><a href="#about">Sobre nosotros</a></li>
-                  <li><a href="#">Precios</a></li>
+                  <li>
+                    <a href="#features">Características</a>
+                  </li>
+                  <li>
+                    <a href="#about">Sobre nosotros</a>
+                  </li>
+                  <li>
+                    <a href="#">Precios</a>
+                  </li>
                 </ul>
               </div>
-             
+
               <div className="link-group">
                 <h4>Social</h4>
                 <div className="social-links">

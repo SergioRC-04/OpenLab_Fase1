@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./components/Home";
 import MyProjects from "./components/MyProjects";
@@ -7,27 +8,48 @@ import ProjectDetail from "./components/ProjectDetail";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LandingPage from "./components/LandingPage"; 
-import ExploreProjects from "./components/ExploreProjects"; // Importar nuevo componente
-import ProjectDetailPublic from "./components/ProjectDetailPublic"; // Importar nuevo componente
-import "./App.css";
+import LandingPage from "./components/landingpage";
+import ExploreProjects from "./components/ExploreProjects";
+import ProjectDetailPublic from "./components/ProjectDetailPublic";
+import "./app.css";
+import Profile from "./components/Profile";
 
 function App() {
   const [usuario, setUsuario] = useState(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUsuario(user);
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <ThemeProvider>
       <Router>
         <Routes>
           {/* Ruta pública para LandingPage */}
-          <Route path="/" element={<LandingPage />} />
+          <Route
+            path="/"
+            element={<LandingPage usuario={usuario} setUsuario={setUsuario} />}
+          />
 
           {/* Nuevas rutas para explorar proyectos - accesibles sin login */}
-          <Route path="/explore" element={<ExploreProjects usuario={usuario} />} />
-          <Route path="/project-details/:id" element={<ProjectDetailPublic usuario={usuario} />} />
+          <Route
+            path="/explore"
+            element={<ExploreProjects usuario={usuario} />}
+          />
+          <Route
+            path="/project-details/:id"
+            element={<ProjectDetailPublic usuario={usuario} />}
+          />
 
           {/* Ruta pública para Home */}
-          <Route path="/home" element={<Home setUsuario={setUsuario} usuario={usuario} />} />
+          <Route
+            path="/home"
+            element={<Home setUsuario={setUsuario} usuario={usuario} />}
+          />
 
           {/* Rutas protegidas */}
           <Route
@@ -51,6 +73,14 @@ function App() {
           {/* Rutas de autenticación */}
           <Route path="/login" element={<Login setUsuario={setUsuario} />} />
           <Route path="/register" element={<Register />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute usuario={usuario}>
+                <Profile usuario={usuario} />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </ThemeProvider>

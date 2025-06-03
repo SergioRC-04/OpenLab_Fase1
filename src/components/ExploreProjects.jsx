@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import appFirebase from "../credenciales";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import "./home-details.css";
-import ThemeToggle from './ThemeToggle';
+import ThemeToggle from "./ThemeToggle";
 
 const db = getFirestore(appFirebase);
 
@@ -38,18 +38,30 @@ const ExploreProjects = ({ usuario }) => {
       {/* Header */}
       <header className="dashboard-header">
         <div className="header-content">
-          <div className="logo-section" onClick={() => navigate("/")} style={{cursor: "pointer"}}>
+          <div
+            className="logo-section"
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          >
             <h1>Mi OpenLab</h1>
           </div>
-       <div className="user-section">
-  <ThemeToggle />
-  {usuario ? (
-    <>
-      <div className="user-info">
-                  <span className="user-name">{usuario.email.split('@')[0]}</span>
+          <div className="user-section">
+            <ThemeToggle />
+            {usuario ? (
+              <>
+                <div className="user-info">
+                  <span className="user-name">
+                    {usuario.email.split("@")[0]}
+                  </span>
                   <span className="user-email">{usuario.email}</span>
                 </div>
-                <div className="user-avatar">
+                {/* Avatar clickeable que lleva al perfil */}
+                <div
+                  className="user-avatar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate("/profile")}
+                  title="Ver perfil"
+                >
                   <span>{usuario.email[0].toUpperCase()}</span>
                 </div>
                 <button className="nav-btn" onClick={() => navigate("/home")}>
@@ -63,7 +75,10 @@ const ExploreProjects = ({ usuario }) => {
               </>
             ) : (
               <>
-                <button className="nav-button" onClick={() => navigate("/login")}>
+                <button
+                  className="nav-button"
+                  onClick={() => navigate("/login")}
+                >
                   Iniciar Sesión
                 </button>
                 <button className="nav-button" onClick={() => navigate("/")}>
@@ -101,39 +116,58 @@ const ExploreProjects = ({ usuario }) => {
             <div className="projects-grid">
               {proyectos.map((proyecto) => (
                 <div className="project-card" key={proyecto.id}>
-                  <div 
-                    className="project-image" 
-                    style={{ backgroundImage: `url(${proyecto.imagen || "https://via.placeholder.com/300x200?text=Proyecto"})` }}
+                  <div
+                    className="project-image"
+                    style={{
+                      backgroundImage: `url(${
+                        proyecto.imagen ||
+                        "https://via.placeholder.com/300x200?text=Proyecto"
+                      })`,
+                    }}
                   >
-                    <div className="project-status">{proyecto.estado || "Publicado"}</div>
+                    <div className="project-status">
+                      {proyecto.estado || "Publicado"}
+                    </div>
                   </div>
                   <div className="project-content">
                     <h4>{proyecto.titulo}</h4>
-                    <p className="project-description">{proyecto.descripcion?.length > 100 
-                      ? proyecto.descripcion.substring(0, 100) + "..." 
-                      : proyecto.descripcion}
+                    <p className="project-description">
+                      {proyecto.descripcion?.length > 100
+                        ? proyecto.descripcion.substring(0, 100) + "..."
+                        : proyecto.descripcion}
                     </p>
-                    
-                    {proyecto.tecnologias && proyecto.tecnologias.length > 0 && (
-                      <div className="project-tech">
-                        {proyecto.tecnologias.map((tech, index) => (
-                          <span key={index} className="tech-tag">{tech}</span>
-                        ))}
-                      </div>
-                    )}
-                    
+
+                    {proyecto.tecnologias &&
+                      proyecto.tecnologias.length > 0 && (
+                        <div className="project-tech">
+                          {proyecto.tecnologias.map((tech, index) => (
+                            <span key={index} className="tech-tag">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
                     <div className="project-footer">
                       <div className="project-author">
                         <div className="author-avatar">
-                          {(proyecto.nombreUsuario || proyecto.autor || "A")[0].toUpperCase()}
+                          {(proyecto.nombreUsuario ||
+                            proyecto.autor ||
+                            "A")[0].toUpperCase()}
                         </div>
-                        <span>{proyecto.nombreUsuario || proyecto.autor || "Anónimo"}</span>
+                        <span>
+                          {proyecto.nombreUsuario ||
+                            proyecto.autor ||
+                            "Anónimo"}
+                        </span>
                       </div>
-                      
+
                       {/* Solo mostrar el botón Ver Detalles, sin importar quién creó el proyecto */}
-                      <button 
+                      <button
                         className="view-details-btn"
-                        onClick={() => navigate(`/project-details/${proyecto.id}`)}
+                        onClick={() =>
+                          navigate(`/project-details/${proyecto.id}`)
+                        }
                       >
                         Ver detalles
                       </button>

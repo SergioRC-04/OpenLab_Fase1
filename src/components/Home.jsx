@@ -5,8 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import "./home-details.css";
-import ThemeToggle from './ThemeToggle';
-
+import ThemeToggle from "./ThemeToggle";
 
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
@@ -26,7 +25,7 @@ const Home = ({ usuario, setUsuario }) => {
   useEffect(() => {
     const cargarMisProyectos = async () => {
       if (!usuario) return;
-      
+
       setIsLoading(true);
       try {
         const proyectosRef = collection(db, "proyectos");
@@ -56,17 +55,21 @@ const Home = ({ usuario, setUsuario }) => {
         titulo,
         descripcion,
         imagen: imagen || "https://via.placeholder.com/300x200?text=Proyecto",
-        tecnologias: tecnologias ? tecnologias.split(",").map(t => t.trim()) : [],
-        colaboradores: colaboradores ? colaboradores.split(",").map(c => c.trim()) : [],
+        tecnologias: tecnologias
+          ? tecnologias.split(",").map((t) => t.trim())
+          : [],
+        colaboradores: colaboradores
+          ? colaboradores.split(",").map((c) => c.trim())
+          : [],
         fecha: new Date().toISOString(),
         usuario: usuario ? usuario.uid : "anónimo",
-        nombreUsuario: usuario ? usuario.email.split('@')[0] : "anónimo",
-        estado: "En desarrollo"
+        nombreUsuario: usuario ? usuario.email.split("@")[0] : "anónimo",
+        estado: "En desarrollo",
       };
 
       const docRef = await addDoc(collection(db, "proyectos"), nuevoProyecto);
       setProyectos([...proyectos, { id: docRef.id, ...nuevoProyecto }]);
-      
+
       // Reset form fields
       setTitulo("");
       setDescripcion("");
@@ -74,7 +77,6 @@ const Home = ({ usuario, setUsuario }) => {
       setTecnologias("");
       setColaboradores("");
       setMostrarFormulario(false);
-      
     } catch (error) {
       console.error("Error creando el proyecto:", error);
     }
@@ -84,7 +86,7 @@ const Home = ({ usuario, setUsuario }) => {
     signOut(auth).then(() => {
       navigate("/");
     });
-    setUsuario(null); 
+    setUsuario(null);
   };
 
   return (
@@ -95,18 +97,29 @@ const Home = ({ usuario, setUsuario }) => {
           <div className="logo-section">
             <h1>Mi OpenLab</h1>
           </div>
-         <div className="user-section">
-          {usuario && (
-            <>
-              <ThemeToggle />
-              <div className="user-info">
-                <span className="user-name">{usuario.email.split('@')[0]}</span>
-                <span className="user-email">{usuario.email}</span>
-              </div>
-                <div className="user-avatar">
+          <div className="user-section">
+            {usuario && (
+              <>
+                <ThemeToggle />
+                <div className="user-info">
+                  <span className="user-name">
+                    {usuario.email.split("@")[0]}
+                  </span>
+                  <span className="user-email">{usuario.email}</span>
+                </div>
+                {/* Avatar ahora es clickeable y lleva al perfil */}
+                <div
+                  className="user-avatar"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate("/profile")}
+                  title="Ver perfil"
+                >
                   <span>{usuario.email[0].toUpperCase()}</span>
                 </div>
-                <button className="explore-btn" onClick={() => navigate("/explore")}>
+                <button
+                  className="explore-btn"
+                  onClick={() => navigate("/explore")}
+                >
                   <i className="fas fa-compass"></i>
                   <span>Explorar</span>
                 </button>
@@ -124,11 +137,14 @@ const Home = ({ usuario, setUsuario }) => {
       <main className="dashboard-main">
         <div className="dashboard-welcome">
           <div className="welcome-text">
-            <h2>Bienvenido a tu espacio creativo, {usuario ? usuario.email.split('@')[0] : "Usuario"}</h2>
+            <h2>
+              Bienvenido a tu espacio creativo,{" "}
+              {usuario ? usuario.email.split("@")[0] : "Usuario"}
+            </h2>
             <p>Crea, gestiona y comparte tus proyectos con la comunidad.</p>
           </div>
-          <button 
-            className={`new-project-btn ${mostrarFormulario ? 'active' : ''}`}
+          <button
+            className={`new-project-btn ${mostrarFormulario ? "active" : ""}`}
             onClick={() => setMostrarFormulario(!mostrarFormulario)}
           >
             {mostrarFormulario ? (
@@ -151,7 +167,9 @@ const Home = ({ usuario, setUsuario }) => {
             <h3>Crear nuevo proyecto</h3>
             <form onSubmit={handleCrearProyecto} className="project-form">
               <div className="form-group">
-                <label htmlFor="titulo">Título del proyecto <span className="required">*</span></label>
+                <label htmlFor="titulo">
+                  Título del proyecto <span className="required">*</span>
+                </label>
                 <input
                   type="text"
                   id="titulo"
@@ -163,7 +181,9 @@ const Home = ({ usuario, setUsuario }) => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="descripcion">Descripción <span className="required">*</span></label>
+                <label htmlFor="descripcion">
+                  Descripción <span className="required">*</span>
+                </label>
                 <textarea
                   id="descripcion"
                   value={descripcion}
@@ -187,7 +207,9 @@ const Home = ({ usuario, setUsuario }) => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="tecnologias">Tecnologías (separadas por comas)</label>
+                  <label htmlFor="tecnologias">
+                    Tecnologías (separadas por comas)
+                  </label>
                   <input
                     type="text"
                     id="tecnologias"
@@ -198,7 +220,9 @@ const Home = ({ usuario, setUsuario }) => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="colaboradores">Colaboradores (separados por comas)</label>
+                  <label htmlFor="colaboradores">
+                    Colaboradores (separados por comas)
+                  </label>
                   <input
                     type="text"
                     id="colaboradores"
@@ -210,7 +234,11 @@ const Home = ({ usuario, setUsuario }) => {
               </div>
 
               <div className="form-actions">
-                <button type="button" className="cancel-btn" onClick={() => setMostrarFormulario(false)}>
+                <button
+                  type="button"
+                  className="cancel-btn"
+                  onClick={() => setMostrarFormulario(false)}
+                >
                   Cancelar
                 </button>
                 <button type="submit" className="submit-btn">
@@ -224,7 +252,7 @@ const Home = ({ usuario, setUsuario }) => {
         {/* Projects display - SOLO MIS PROYECTOS */}
         <div className="projects-section">
           <h3>Mis Proyectos</h3>
-          
+
           {isLoading ? (
             <div className="loading-container">
               <div className="loading-spinner"></div>
@@ -240,27 +268,36 @@ const Home = ({ usuario, setUsuario }) => {
             <div className="projects-grid">
               {proyectos.map((proyecto) => (
                 <div className="project-card" key={proyecto.id}>
-                  <div 
-                    className="project-image" 
-                    style={{ backgroundImage: `url(${proyecto.imagen || "https://via.placeholder.com/300x200?text=Proyecto"})` }}
+                  <div
+                    className="project-image"
+                    style={{
+                      backgroundImage: `url(${
+                        proyecto.imagen ||
+                        "https://via.placeholder.com/300x200?text=Proyecto"
+                      })`,
+                    }}
                   >
                     <div className="project-status">{proyecto.estado}</div>
                   </div>
                   <div className="project-content">
                     <h4>{proyecto.titulo}</h4>
-                    <p className="project-description">{proyecto.descripcion.length > 100 
-                      ? proyecto.descripcion.substring(0, 100) + "..." 
-                      : proyecto.descripcion}
+                    <p className="project-description">
+                      {proyecto.descripcion.length > 100
+                        ? proyecto.descripcion.substring(0, 100) + "..."
+                        : proyecto.descripcion}
                     </p>
-                    
-                    {proyecto.tecnologias && proyecto.tecnologias.length > 0 && (
-                      <div className="project-tech">
-                        {proyecto.tecnologias.map((tech, index) => (
-                          <span key={index} className="tech-tag">{tech}</span>
-                        ))}
-                      </div>
-                    )}
-                    
+
+                    {proyecto.tecnologias &&
+                      proyecto.tecnologias.length > 0 && (
+                        <div className="project-tech">
+                          {proyecto.tecnologias.map((tech, index) => (
+                            <span key={index} className="tech-tag">
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
                     <div className="project-footer">
                       <div className="project-author">
                         <div className="author-avatar">
@@ -268,8 +305,8 @@ const Home = ({ usuario, setUsuario }) => {
                         </div>
                         <span>{proyecto.nombreUsuario || "Anónimo"}</span>
                       </div>
-                      
-                      <button 
+
+                      <button
                         className="edit-btn"
                         onClick={() => navigate(`/proyecto/${proyecto.id}`)}
                       >

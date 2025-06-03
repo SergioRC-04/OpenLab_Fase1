@@ -9,7 +9,11 @@
   --danger: #e74c3c;
   --success: #2ecc71;
   --shadow: rgba(0, 0, 0, 0.1);
-  --gradient: linear-gradient(135deg, var(--primary-light), var(--primary-dark));
+  --gradient: linear-gradient(
+    135deg,
+    var(--primary-light),
+    var(--primary-dark)
+  );
 }
 
 /* Reset and Base Styles */
@@ -20,14 +24,14 @@
 }
 
 /* Reset body styles to ensure full width */
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
- 
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: var(--neutral-dark);
   line-height: 1.6;
   background-color: #f0f2f5;
@@ -262,7 +266,8 @@ body {
   text-align: center;
 }
 
-.subtitle, .subheadline {
+.subtitle,
+.subheadline {
   width: 100%;
   text-align: center;
   margin-left: auto;
@@ -550,25 +555,25 @@ h2 {
   .hero h1 {
     font-size: 36px;
   }
-  
+
   .subtitle {
     font-size: 20px;
   }
-  
+
   .cta-buttons {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .btn {
     width: 100%;
     max-width: 300px;
   }
-  
+
   .footer-content {
     flex-direction: column;
   }
-  
+
   .footer-links {
     flex-direction: column;
     gap: 30px;
@@ -580,15 +585,15 @@ h2 {
   .hero {
     padding: 130px 0 70px;
   }
-  
+
   .hero h1 {
     font-size: 28px;
   }
-  
+
   .subtitle {
     font-size: 18px;
   }
-  
+
   .feature-cards {
     grid-template-columns: 1fr;
   }
@@ -667,4 +672,21 @@ h2 {
 
 [data-theme="dark"] .auth-container p {
   color: var(--neutral-dark);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  text-decoration: underline;
+  transition: color 0.2s;
+  padding: 0;
+}
+
+.link-btn:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
 }
