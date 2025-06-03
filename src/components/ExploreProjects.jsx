@@ -4,6 +4,8 @@ import appFirebase from "../credenciales";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import "./home-details.css";
 import ThemeToggle from "./ThemeToggle";
+import LikeButton from "./LikeButton";
+import UserRanking from "./UserRanking";
 
 const db = getFirestore(appFirebase);
 
@@ -55,7 +57,6 @@ const ExploreProjects = ({ usuario }) => {
                   </span>
                   <span className="user-email">{usuario.email}</span>
                 </div>
-                {/* Avatar clickeable que lleva al perfil */}
                 <div
                   className="user-avatar"
                   style={{ cursor: "pointer" }}
@@ -149,10 +150,10 @@ const ExploreProjects = ({ usuario }) => {
                       )}
 
                     <div className="project-footer">
-                      <div 
-                        className="project-author" 
+                      <div
+                        className="project-author"
                         onClick={(e) => {
-                          e.stopPropagation(); // Evitar que se active el clic de toda la tarjeta
+                          e.stopPropagation();
                           if (proyecto.usuario) {
                             navigate(`/profile/${proyecto.usuario}`);
                           }
@@ -161,31 +162,42 @@ const ExploreProjects = ({ usuario }) => {
                         title={proyecto.usuario ? "Ver perfil" : ""}
                       >
                         <div className="author-avatar">
-                          {(proyecto.nombreUsuario ||
-                            proyecto.autor ||
-                            "A")[0].toUpperCase()}
+                          {(proyecto.nombreUsuario || proyecto.autor || "A")[0].toUpperCase()}
                         </div>
                         <span>
-                          {proyecto.nombreUsuario ||
-                            proyecto.autor ||
-                            "Anónimo"}
+                          {proyecto.nombreUsuario || proyecto.autor || "Anónimo"}
                         </span>
                       </div>
-                      {/* Solo mostrar el botón Ver Detalles, sin importar quién creó el proyecto */}
-                      <button
-                        className="view-details-btn"
-                        onClick={() =>
-                          navigate(`/project-details/${proyecto.id}`)
-                        }
+
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          alignItems: "center",
+                        }}
                       >
-                        Ver detalles
-                      </button>
+                        <LikeButton projectId={proyecto.id} currentUser={usuario} />
+                        <button
+                          className="view-details-btn"
+                          onClick={() =>
+                            navigate(`/project-details/${proyecto.id}`)
+                          }
+                        >
+                          Ver detalles
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
+        </div>
+
+        {/* Sección de ranking */}
+        <div className="section-divider"></div>
+        <div className="ranking-section">
+          <UserRanking maxUsers={5} />
         </div>
       </main>
 
@@ -204,3 +216,4 @@ const ExploreProjects = ({ usuario }) => {
 };
 
 export default ExploreProjects;
+

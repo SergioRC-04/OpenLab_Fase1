@@ -4,6 +4,7 @@ import appFirebase from "../credenciales";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import "./home-details.css";
 import ThemeToggle from './ThemeToggle';
+import LikeButton from './LikeButton';
 
 const db = getFirestore(appFirebase);
 
@@ -124,6 +125,28 @@ const ProjectDetailPublic = ({ usuario }) => {
             <div className="project-description-full">
               <p>{proyecto.descripcion}</p>
             </div>
+            
+            {/* Añadir sección de interacción con botón de like */}
+            <div className="project-interactions" style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <LikeButton projectId={id} currentUser={usuario} />
+              <span style={{ color: 'var(--neutral-dark)', fontSize: '14px' }}>
+                Da like si te gusta este proyecto
+              </span>
+            </div>
+            
+            {/* Si el proyecto tiene tecnologías, mostrarlas */}
+            {proyecto.tecnologias && proyecto.tecnologias.length > 0 && (
+              <div className="project-section">
+                <h3>Tecnologías</h3>
+                <div className="tech-tags">
+                  {proyecto.tecnologias.map((tech, index) => (
+                    <span key={index} className="tech-tag">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </main>
