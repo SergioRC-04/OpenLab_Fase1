@@ -1,0 +1,234 @@
+.comments-section {
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid var(--neutral-light);
+}
+
+.comments-section h3 {
+  margin-bottom: 20px;
+  color: var(--primary-dark);
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Formulario de comentarios */
+.comment-form {
+  margin-bottom: 30px;
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.comment-input-container {
+  display: flex;
+  gap: 15px;
+}
+
+.comment-user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.comment-user-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-form textarea {
+  flex: 1;
+  border: 1px solid var(--neutral-light);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+  background-color: var(--input-bg);
+  color: var(--text);
+  transition: border-color 0.2s ease;
+}
+
+.comment-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+.comment-form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  padding: 0 10px;
+}
+
+.comment-chars {
+  font-size: 12px;
+  color: var(--neutral-dark);
+}
+
+.comment-submit-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comment-submit-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.comment-submit-btn:disabled {
+  background-color: var(--neutral-mid);
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-to-comment {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--neutral-light);
+  border-radius: 8px;
+  margin-bottom: 30px;
+  color: var(--neutral-dark);
+}
+
+/* Lista de comentarios */
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.comment-item {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 1px 3px var(--shadow);
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.comment-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.comment-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-user-name {
+  font-weight: 600;
+  color: var(--primary-dark);
+  font-size: 14px;
+}
+
+.comment-date {
+  font-size: 12px;
+  color: var(--neutral-dark);
+  opacity: 0.8;
+}
+
+.comment-content {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.delete-comment-btn {
+  background: none;
+  border: none;
+  color: var(--neutral-dark);
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.delete-comment-btn:hover {
+  color: var(--danger);
+  background-color: rgba(var(--danger-rgb), 0.1);
+}
+
+.comments-loading,
+.no-comments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: var(--neutral-dark);
+  background-color: var(--neutral-light);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.no-comments i {
+  font-size: 32px;
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+
+/* Dark mode */
+[data-theme="dark"] .comment-form {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .login-to-comment,
+[data-theme="dark"] .comments-loading,
+[data-theme="dark"] .no-comments {
+  background-color: var(--card-bg);
+  color: var(--text);
+}
+
+[data-theme="dark"] .comment-form textarea {
+  background-color: var(--card-bg);
+  border-color: var(--neutral-mid);
+}
+
+[data-theme="dark"] .comment-chars {
+  color: var(--text);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .comment-input-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .comment-form textarea {
+    width: 100%;
+  }
+}

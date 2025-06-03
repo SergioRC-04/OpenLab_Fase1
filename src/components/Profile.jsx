@@ -14,11 +14,13 @@ import {
   addDoc,
   deleteDoc,
   onSnapshot,
-} from "firebase/firestore"
-import appFirebase from "../credenciales"
-import "./Profile.css"
-import ThemeToggle from "./ThemeToggle"
-import ReputationProfile from "./ReputationProfile"
+
+} from "firebase/firestore";
+import appFirebase from "../credenciales";
+import "./Profile.css";
+import ThemeToggle from "./ThemeToggle";
+import ReputationProfile from "./ReputationProfile";
+import FavoriteProjects from './FavoriteProjects';
 
 const db = getFirestore(appFirebase)
 
@@ -506,6 +508,7 @@ const Profile = ({ usuario }) => {
         </div>
       )}
 
+      {isOwnProfile && <FavoriteProjects userId={usuario.uid} />}
       {usuario && <ReputationProfile userId={usuario.uid} />}
     </div>
   )

@@ -5,6 +5,8 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 import "./home-details.css";
 import ThemeToggle from './ThemeToggle';
 import LikeButton from './LikeButton';
+import CommentSection from './CommentSection';
+import FavoriteButton from './FavoriteButton';
 
 const db = getFirestore(appFirebase);
 
@@ -126,11 +128,12 @@ const ProjectDetailPublic = ({ usuario }) => {
               <p>{proyecto.descripcion}</p>
             </div>
             
-            {/* Añadir sección de interacción con botón de like */}
+            {/* Añadir sección de interacción con botones de like y favoritos */}
             <div className="project-interactions" style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
               <LikeButton projectId={id} currentUser={usuario} />
+              <FavoriteButton projectId={id} currentUser={usuario} />
               <span style={{ color: 'var(--neutral-dark)', fontSize: '14px' }}>
-                Da like si te gusta este proyecto
+                Da like o guarda este proyecto en favoritos
               </span>
             </div>
             
@@ -147,6 +150,9 @@ const ProjectDetailPublic = ({ usuario }) => {
                 </div>
               </div>
             )}
+            
+            {/* Sección de comentarios */}
+            <CommentSection projectId={id} currentUser={usuario} />
           </div>
         </div>
       </main>
