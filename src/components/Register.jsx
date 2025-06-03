@@ -35,14 +35,31 @@ const Register = () => {
         contraseña
       );
 
-      const userId = userCredential.user.uid; // Obtener el UID del usuario
+      const userId = userCredential.user.uid;
 
-      // Guardar información adicional en Firestore
+      // Guardar información adicional en Firestore incluyendo la estructura de reputación
       await setDoc(doc(db, "usuarios", userId), {
+        // Información básica del usuario
         nombre,
         apellido,
         edad,
         correo,
+        fechaRegistro: new Date(),
+
+        // Campos para el sistema de reputación
+        puntos: {
+          total: 0,
+          porProyectos: 0,
+          porLikes: 0,
+          porComentarios: 0,
+          porActividad: 0,
+        },
+        nivel: {
+          actual: 1,
+          siguienteNivel: 100,
+          progreso: 0,
+        },
+        logros: [],
       });
 
       setError(""); // Limpia errores si el registro es exitoso
@@ -55,11 +72,11 @@ const Register = () => {
   };
 
   return (
-   <div className="auth-container">
-  <div style={{ position: 'absolute', top: '20px', right: '20px' }}>
-    <ThemeToggle />
-  </div>
-  <h2>Registro</h2>
+    <div className="auth-container">
+      <div style={{ position: "absolute", top: "20px", right: "20px" }}>
+        <ThemeToggle />
+      </div>
+      <h2>Registro</h2>
       <form onSubmit={handleRegister}>
         <input type="text" name="nombre" placeholder="Nombre" required />
         <input type="text" name="apellido" placeholder="Apellido" required />
