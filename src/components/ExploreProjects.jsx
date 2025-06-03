@@ -5,7 +5,7 @@ import { getFirestore, collection, getDocs } from "firebase/firestore";
 import "./home-details.css";
 import ThemeToggle from "./ThemeToggle";
 import LikeButton from "./LikeButton";
-import UserRanking from "./UserRanking"; // Nueva importación
+import UserRanking from "./UserRanking";
 
 const db = getFirestore(appFirebase);
 
@@ -57,7 +57,6 @@ const ExploreProjects = ({ usuario }) => {
                   </span>
                   <span className="user-email">{usuario.email}</span>
                 </div>
-                {/* Avatar clickeable que lleva al perfil */}
                 <div
                   className="user-avatar"
                   style={{ cursor: "pointer" }}
@@ -151,16 +150,22 @@ const ExploreProjects = ({ usuario }) => {
                       )}
 
                     <div className="project-footer">
-                      <div className="project-author">
+                      <div
+                        className="project-author"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (proyecto.usuario) {
+                            navigate(`/profile/${proyecto.usuario}`);
+                          }
+                        }}
+                        style={{ cursor: proyecto.usuario ? "pointer" : "default" }}
+                        title={proyecto.usuario ? "Ver perfil" : ""}
+                      >
                         <div className="author-avatar">
-                          {(proyecto.nombreUsuario ||
-                            proyecto.autor ||
-                            "A")[0].toUpperCase()}
+                          {(proyecto.nombreUsuario || proyecto.autor || "A")[0].toUpperCase()}
                         </div>
                         <span>
-                          {proyecto.nombreUsuario ||
-                            proyecto.autor ||
-                            "Anónimo"}
+                          {proyecto.nombreUsuario || proyecto.autor || "Anónimo"}
                         </span>
                       </div>
 
@@ -171,10 +176,7 @@ const ExploreProjects = ({ usuario }) => {
                           alignItems: "center",
                         }}
                       >
-                        {/* Agregar el botón de like */}
                         <LikeButton projectId={proyecto.id} currentUser={usuario} />
-
-                        {/* Botón Ver detalles existente */}
                         <button
                           className="view-details-btn"
                           onClick={() =>
@@ -192,10 +194,8 @@ const ExploreProjects = ({ usuario }) => {
           )}
         </div>
 
-        {/* Nueva sección para el ranking de usuarios */}
+        {/* Sección de ranking */}
         <div className="section-divider"></div>
-
-        {/* Ranking de usuarios */}
         <div className="ranking-section">
           <UserRanking maxUsers={5} />
         </div>
@@ -216,3 +216,4 @@ const ExploreProjects = ({ usuario }) => {
 };
 
 export default ExploreProjects;
+

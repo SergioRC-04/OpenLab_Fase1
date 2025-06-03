@@ -122,8 +122,14 @@ function App() {
             }
           />
           <Route
-            path="/ranking"
-            element={<RankingPage usuario={usuario} />}
+            path="/profile/:id" 
+            element={ 
+                <Profile usuario={usuario} /> }
+             />
+          <Route 
+            path="/ranking" 
+            element=
+               {<RankingPage usuario={usuario} />}
           />
         </Routes>
       </Router>
