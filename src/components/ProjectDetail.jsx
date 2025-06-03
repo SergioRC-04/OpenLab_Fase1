@@ -26,6 +26,11 @@ const ProjectDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { darkMode } = useContext(ThemeContext);
+  const [visible, setVisible] = useState(true); // o false, depende de tu lógica
+  const [githubLink, setGithubLink] = useState("");
+  const [demoLink, setDemoLink] = useState("");
+
+
 
   useEffect(() => {
     const cargarProyecto = async () => {
@@ -42,7 +47,14 @@ const ProjectDetail = () => {
           setImagen(data.imagen || "");
           setTecnologias(data.tecnologias?.join(", ") || "");
           setColaboradores(data.colaboradores?.join(", ") || "");
+          setVisible(data.visibilidad); // asegúrate que en la DB se llama 'visibilidad'
+          const github = data.links?.find((l) => l.tipo === "github");
+          const demo = data.links?.find((l) => l.tipo === "demo");
+
+          setGithubLink(github?.url || "");
+          setDemoLink(demo?.url || "");
           setError(null);
+  
         } else {
           setError("No se encontró el proyecto");
           console.log("No se encontró el proyecto.");
@@ -61,13 +73,21 @@ const ProjectDetail = () => {
   const handleEditarProyecto = async () => {
     try {
       const proyectoRef = doc(db, "proyectos", id);
+
       await updateDoc(proyectoRef, {
         titulo,
         descripcion,
         imagen,
         tecnologias: tecnologias ? tecnologias.split(",").map((tec) => tec.trim()) : [],
         colaboradores: colaboradores ? colaboradores.split(",").map((col) => col.trim()) : [],
+        visibilidad: visible,
+        links: [
+          githubLink ? { tipo: "github", url: githubLink } : null,
+          demoLink ? { tipo: "demo", url: demoLink } : null,
+        ].filter(Boolean),
       });
+
+
       
       alert("Proyecto actualizado exitosamente");
       navigate("/home");
@@ -233,6 +253,38 @@ const ProjectDetail = () => {
                   placeholder="juan@email.com, maria@email.com"
                 />
               </div>
+
+              <div className="form-group">
+                <label htmlFor="visibilidad">Visibilidad del proyecto</label>
+                <select id="visibilidad" value={visible} onChange={(e) => setVisible(e.target.value === "true")}>
+                  <option value="true">Publico</option>
+                  <option value="false">Privado</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="githubLink">Enlace a GitHub</label>
+                <input
+                  type="url"
+                  id="githubLink"
+                  value={githubLink}
+                  onChange={(e) => setGithubLink(e.target.value)}
+                  placeholder="https://github.com/usuario/proyecto"
+                />
+              </div>
+                          
+              <div className="form-group">
+                <label htmlFor="demoLink">Enlace a Demo</label>
+                <input
+                  type="url"
+                  id="demoLink"
+                  value={demoLink}
+                  onChange={(e) => setDemoLink(e.target.value)}
+                  placeholder="https://mi-proyecto-demo.com"
+                />
+              </div>
+
+
             </div>
             
             <div className="form-actions">

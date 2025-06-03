@@ -20,10 +20,13 @@ const ExploreProjects = ({ usuario }) => {
       try {
         const proyectosRef = collection(db, "proyectos");
         const querySnapshot = await getDocs(proyectosRef);
-        const proyectosCargados = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
+        const proyectosCargados = querySnapshot.docs
+          .map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+          .filter((proyecto) => proyecto.visibilidad === true); // 🔥 solo visibles
+        
         setProyectos(proyectosCargados);
       } catch (error) {
         console.error("Error cargando proyectos:", error);
@@ -31,7 +34,7 @@ const ExploreProjects = ({ usuario }) => {
         setIsLoading(false);
       }
     };
-
+  
     cargarProyectos();
   }, []);
 

@@ -21,6 +21,12 @@ const Home = ({ usuario, setUsuario }) => {
   const [colaboradores, setColaboradores] = useState("");
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [visibilidad, setVisibilidad] = useState(true); // true = público, false = privado
+  const [githubLink, setGithubLink] = useState("");
+  const [demoLink, setDemoLink] = useState("");
+
+
+
 
   // Cargar solo los proyectos del usuario actual
   useEffect(() => {
@@ -66,8 +72,13 @@ const Home = ({ usuario, setUsuario }) => {
         usuario: usuario ? usuario.uid : "anónimo",
         nombreUsuario: usuario ? usuario.email.split("@")[0] : "anónimo",
         estado: "En desarrollo",
-        visibilidad: "publico", // Por defecto público, podrías añadir esta opción en el formulario
+        visibilidad: visibilidad,
+        links: [
+          githubLink ? { tipo: "github", url: githubLink } : null,
+          demoLink ? { tipo: "demo", url: demoLink } : null,
+        ].filter(Boolean),
       };
+
 
       const docRef = await addDoc(collection(db, "proyectos"), nuevoProyecto);
       setProyectos([...proyectos, { id: docRef.id, ...nuevoProyecto }]);
@@ -79,6 +90,10 @@ const Home = ({ usuario, setUsuario }) => {
       setTecnologias("");
       setColaboradores("");
       setMostrarFormulario(false);
+      setVisibilidad(true); // o el valor que consideres por defecto
+      setGithubLink("");
+      setDemoLink("");
+
 
       // NUEVO: Otorgar puntos por crear proyecto
       if (usuario) {
@@ -241,6 +256,45 @@ const Home = ({ usuario, setUsuario }) => {
                     placeholder="juan@email.com, maria@email.com"
                   />
                 </div>
+                
+                <div className="form-row">
+                  <div className="form-group">
+                    <label htmlFor="githubLink">Link de GitHub</label>
+                    <input
+                      type="url"
+                      id="githubLink"
+                      value={githubLink}
+                      onChange={(e) => setGithubLink(e.target.value)}
+                      placeholder="https://github.com/usuario/repositorio"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label htmlFor="demoLink">Link de Demo</label>
+                    <input
+                      type="url"
+                      id="demoLink"
+                      value={demoLink}
+                      onChange={(e) => setDemoLink(e.target.value)}
+                      placeholder="https://youtube.com/demo"
+                    />
+                  </div>
+                </div>
+
+
+
+                <div className="form-group">                
+                <label htmlFor="visibilidad">Visibilidad</label>
+                  <select
+                    id="visibilidad"
+                    value={visibilidad ? "publico" : "privado"}
+                    onChange={(e) => setVisibilidad(e.target.value === "publico")}
+                  >
+                    <option value="publico">Público</option>
+                    <option value="privado">Privado</option>
+                  </select>
+                </div>
+
               </div>
 
               <div className="form-actions">
