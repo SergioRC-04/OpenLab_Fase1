@@ -1042,3 +1042,21 @@ body {
   background-color: var(--neutral-mid);
   color: var(--text);
 }
+
+.section-divider {
+  height: 1px;
+  background: var(--neutral-light);
+  margin: 40px 0;
+  opacity: 0.5;
+}
+
+.ranking-section {
+  margin: 30px 0 60px;
+}
+
+.ranking-section h3 {
+  color: var(--primary-dark);
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+}

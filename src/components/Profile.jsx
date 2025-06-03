@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 import appFirebase from "../credenciales";
 import "./Profile.css";
+import ReputationProfile from "./ReputationProfile";
 
 const db = getFirestore(appFirebase);
 
@@ -105,6 +106,9 @@ const Profile = ({ usuario }) => {
           <button type="submit">Guardar</button>
         </form>
       )}
+
+      {/* Añadir el componente de reputación */}
+      {usuario && <ReputationProfile userId={usuario.uid} />}
     </div>
   );
 };

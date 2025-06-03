@@ -6,6 +6,7 @@ import { collection, getDocs, addDoc, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import "./home-details.css";
 import ThemeToggle from "./ThemeToggle";
+import ReputacionService from "../services/ReputacionService";
 
 const auth = getAuth(appFirebase);
 const db = getFirestore(appFirebase);
@@ -65,6 +66,7 @@ const Home = ({ usuario, setUsuario }) => {
         usuario: usuario ? usuario.uid : "anónimo",
         nombreUsuario: usuario ? usuario.email.split("@")[0] : "anónimo",
         estado: "En desarrollo",
+        visibilidad: "publico", // Por defecto público, podrías añadir esta opción en el formulario
       };
 
       const docRef = await addDoc(collection(db, "proyectos"), nuevoProyecto);
@@ -77,6 +79,14 @@ const Home = ({ usuario, setUsuario }) => {
       setTecnologias("");
       setColaboradores("");
       setMostrarFormulario(false);
+
+      // NUEVO: Otorgar puntos por crear proyecto
+      if (usuario) {
+        console.log("Otorgando puntos por crear proyecto...");
+        await ReputacionService.otorgarPuntos(usuario.uid, "porProyectos", 25);
+        console.log("Verificando logros...");
+        await ReputacionService.verificarLogros(usuario.uid);
+      }
     } catch (error) {
       console.error("Error creando el proyecto:", error);
     }

@@ -1,0 +1,264 @@
+.reputation-profile {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 5px 15px var(--shadow);
+  margin-top: 40px;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
+}
+
+.reputation-profile:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px var(--shadow);
+}
+
+.reputation-profile h2 {
+  color: var(--primary);
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.reputation-profile h3 {
+  color: var(--primary-dark);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* Tarjeta de nivel */
+.level-card {
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.level-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.level-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: white;
+}
+
+.level-points {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 12px;
+  background-color: rgba(255,255,255,0.3);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: white;
+  border-radius: 6px;
+  transition: width 0.5s ease;
+}
+
+.level-info {
+  text-align: right;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Estadísticas rápidas */
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.stat-item {
+  background-color: var(--card-bg);
+  border: 1px solid var(--neutral-mid);
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.stat-label {
+  font-size: 14px;
+  color: var(--neutral-dark);
+  margin-top: 5px;
+}
+
+/* Desglose de puntos */
+.points-breakdown {
+  margin-bottom: 30px;
+}
+
+.points-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.points-item {
+  background-color: var(--neutral-light);
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.points-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+.points-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+  margin-bottom: 5px;
+}
+
+.points-label {
+  font-size: 14px;
+  color: var(--neutral-dark);
+}
+
+/* Logros */
+.empty-achievements {
+  text-align: center;
+  color: var(--neutral-dark);
+  padding: 20px;
+  background-color: var(--neutral-light);
+  border-radius: 10px;
+}
+
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.achievement-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--neutral-light);
+  padding: 15px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.achievement-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+.achievement-icon {
+  font-size: 32px;
+  margin-right: 15px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
+  color: white;
+  border-radius: 50%;
+}
+
+.achievement-info {
+  flex: 1;
+}
+
+.achievement-name {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--primary);
+  margin-bottom: 5px;
+}
+
+.achievement-desc {
+  font-size: 14px;
+  color: var(--neutral-dark);
+  margin-bottom: 5px;
+}
+
+.achievement-date {
+  font-size: 12px;
+  color: var(--neutral-dark);
+  opacity: 0.8;
+}
+
+/* Loading state */
+.reputation-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+
+.reputation-error {
+  padding: 20px;
+  text-align: center;
+  color: var(--neutral-dark);
+  background: var(--neutral-light);
+  border-radius: 10px;
+}
+
+/* Dark mode compatibilidad */
+[data-theme="dark"] .points-item,
+[data-theme="dark"] .empty-achievements,
+[data-theme="dark"] .achievement-item,
+[data-theme="dark"] .stat-item {
+  background-color: var(--card-bg);
+}
+
+[data-theme="dark"] .points-label,
+[data-theme="dark"] .empty-achievements p,
+[data-theme="dark"] .achievement-desc,
+[data-theme="dark"] .achievement-date,
+[data-theme="dark"] .stat-label {
+  color: var(--text);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-summary {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .points-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .achievements-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-summary {
+    grid-template-columns: 1fr;
+  }
+}

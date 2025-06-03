@@ -4,6 +4,8 @@ import appFirebase from "../credenciales";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
 import "./home-details.css";
 import ThemeToggle from "./ThemeToggle";
+import LikeButton from "./LikeButton";
+import UserRanking from "./UserRanking"; // Nueva importación
 
 const db = getFirestore(appFirebase);
 
@@ -162,21 +164,40 @@ const ExploreProjects = ({ usuario }) => {
                         </span>
                       </div>
 
-                      {/* Solo mostrar el botón Ver Detalles, sin importar quién creó el proyecto */}
-                      <button
-                        className="view-details-btn"
-                        onClick={() =>
-                          navigate(`/project-details/${proyecto.id}`)
-                        }
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: "10px",
+                          alignItems: "center",
+                        }}
                       >
-                        Ver detalles
-                      </button>
+                        {/* Agregar el botón de like */}
+                        <LikeButton projectId={proyecto.id} currentUser={usuario} />
+
+                        {/* Botón Ver detalles existente */}
+                        <button
+                          className="view-details-btn"
+                          onClick={() =>
+                            navigate(`/project-details/${proyecto.id}`)
+                          }
+                        >
+                          Ver detalles
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
+        </div>
+
+        {/* Nueva sección para el ranking de usuarios */}
+        <div className="section-divider"></div>
+
+        {/* Ranking de usuarios */}
+        <div className="ranking-section">
+          <UserRanking maxUsers={5} />
         </div>
       </main>
 
